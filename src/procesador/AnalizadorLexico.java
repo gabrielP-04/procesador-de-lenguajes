@@ -255,7 +255,7 @@ public class AnalizadorLexico {
                         if (index >= 0)
                             return token = new Token(TokenType.values()[index]);
                         else if (zonaDeclarativa) {
-                            p = ts.findSymbolCurrent(lex);
+                            p = ts.findSymbolCurrent(lex); //tabla actual?
                             if (p == -1) {
                                 p = ts.addSymbol(lex);
                                 return token = new Token(TokenType.id, p);

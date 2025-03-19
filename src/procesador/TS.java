@@ -157,7 +157,7 @@ public class TS {
         pos++;
         if (tsPadre == null) {
             ts.put(lex, new Symbol(lex, pos, true));
-
+            id_lex.put(pos, lex);
         } else {
             ts.put(lex, new Symbol(lex, pos, false));
             id_lex.put(pos, lex);
@@ -198,7 +198,7 @@ public class TS {
 
     private Symbol getSymbol(int pos) {
         Symbol symbol = ts.get(id_lex.get(pos));
-        varGlobal = symbol.getGlobal();
+        this.varGlobal = symbol.getGlobal();
         return symbol;
     }
 

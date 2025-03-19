@@ -752,7 +752,6 @@ public class AnalizadorSintactico {
             ts.insertarTipoTS(pos, tipo);
             ts.insertarDespl(pos);
             ts.setDeslp(tipo.getAncho());
-            aLex.setZonaDeclarativa(false);
 
             equiparar(TokenType.puntoComa);
 
