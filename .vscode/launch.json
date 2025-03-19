@@ -14,8 +14,10 @@
             "type": "java",
             "name": "main",
             "request": "launch",
-            "mainClass": "procesador.main",
-            "projectName": "Procesador_a49c18fe"
+            "mainClass": "procesador.Procesador",
+            "projectName": "Procesador_a49c18fe",
+            "args": ["procesador", "examples/Caso1.txt"]
+            
         }
     ]
 }

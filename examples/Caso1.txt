@@ -1,0 +1,17 @@
+var int a ;
+var int b;
+var int c;
+var int d    ;
+
+a = 5;
+b = 10;
+c = a + b;
+
+if (c == 15)
+    output 'La suma es correcta';
+
+d = b ;
+d /= a ;
+
+if (d == 2)
+    output 'La división es correcta';
