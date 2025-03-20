@@ -191,6 +191,7 @@ public class AnalizadorSintactico {
             parse += "\n";
             bwParse.write(parse);
             bwParse.close();
+            GE.terminarGE();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -224,8 +225,14 @@ public class AnalizadorSintactico {
     private void p() {
         if (isFirst.test('B')) {
             parse += " 1";
-            b();
+            Tipo tipoR;
+
+            tipoR = b();
             p();
+
+            if (tipoR != null) {
+                GE.selgErrorAnalizador("Sm-10", aLex.getPuntero(), aLex.getLinea(), sigToken);
+            }
         }
 
         else if (isFirst.test('F')) {
@@ -546,7 +553,7 @@ public class AnalizadorSintactico {
                 return new Tipo[] { tipoOk, vacio };
 
             } else {
-                GE.selgErrorAnalizador("Sx-5", aLex.getPuntero(), aLex.getLinea(), sigToken);
+                GE.selgErrorAnalizador("Sm-5", aLex.getPuntero(), aLex.getLinea(), sigToken);
                 return new Tipo[] { tipoError, vacio };
             }
 
@@ -741,14 +748,14 @@ public class AnalizadorSintactico {
             Tipo tipo;
 
             equiparar(TokenType.PRvar);
-            aLex.setZonaDeclarativa(true);
+            
             tipo = t();
+            aLex.setZonaDeclarativa(false);
 
             int pos = (int) sigToken.getAtribute();
 
             equiparar(TokenType.id);
 
-            aLex.setZonaDeclarativa(false);
             ts.insertarTipoTS(pos, tipo);
             ts.insertarDespl(pos);
             ts.setDeslp(tipo.getAncho());
@@ -792,6 +799,8 @@ public class AnalizadorSintactico {
     }
 
     private Tipo t() {
+        aLex.setZonaDeclarativa(true);
+
         if (sigToken.getType().equals(TokenType.PRint)) {
             parse += " 36";
 
@@ -828,9 +837,10 @@ public class AnalizadorSintactico {
             Tipo tipo2;
             Tipo tipo3;
 
-            aLex.setZonaDeclarativa(true);
+            
             equiparar(TokenType.PRfun);
             tipo1 = h();
+            aLex.setZonaDeclarativa(false);
 
             int pos = (int) sigToken.getAtribute();
 
@@ -838,14 +848,13 @@ public class AnalizadorSintactico {
 
             ts = ts.creatTSChild();
             aLex.setTs(ts);
-            ts.setDeslp(0);
-            aLex.setZonaDeclarativa(false);
+
 
             equiparar(TokenType.paren, 1);
             tipo2 = a();
 
             aLex.setZonaDeclarativa(false);
-            ts.setVarGlobal(true);
+
             ts.insertarTipoTS(pos, funcion);
             ts.insertarTipoParamTS(pos, tipo2);
             ts.insertarTipoRetTS(pos, tipo1);
@@ -853,7 +862,6 @@ public class AnalizadorSintactico {
 
             equiparar(TokenType.paren, 2);
 
-            ts.setVarGlobal(false);
 
             equiparar(TokenType.llave, 1);
             tipo3 = c();
@@ -868,6 +876,7 @@ public class AnalizadorSintactico {
                 }
             }
             ts = ts.destroyTs();
+            aLex.setTs(ts);
         } else {
             GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
         }
@@ -885,6 +894,7 @@ public class AnalizadorSintactico {
 
         } else if (sigToken.getType().equals(TokenType.PRvoid)) {
             parse += " 41";
+            aLex.setZonaDeclarativa(true);
 
             equiparar(TokenType.PRvoid);
 
@@ -904,12 +914,14 @@ public class AnalizadorSintactico {
 
             tipoT = t();
 
-            aLex.setZonaDeclarativa(true);
+            aLex.setZonaDeclarativa(false);
             int pos = (int) sigToken.getAtribute();
 
             equiparar(TokenType.id);
 
             ts.insertarTipoTS(pos, tipoT);
+            ts.insertarDespl(pos);
+            ts.setDeslp(tipoT.getAncho());
 
             tipoK = k();
 
@@ -943,7 +955,16 @@ public class AnalizadorSintactico {
 
             equiparar(TokenType.coma);
             tipoT = t();
+
+            aLex.setZonaDeclarativa(false);
+            int pos = (int) sigToken.getAtribute();
+
             equiparar(TokenType.id);
+
+            ts.insertarTipoTS(pos, tipoT);
+            ts.insertarDespl(pos);
+            ts.setDeslp(tipoT.getAncho());
+
             tipoK = k();
 
             if (tipoK.equals(vacio)) {

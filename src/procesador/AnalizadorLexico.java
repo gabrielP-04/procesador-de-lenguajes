@@ -128,7 +128,6 @@ public class AnalizadorLexico {
                 bwTokens.write(token.toString());
                 br.close();
                 bwTokens.close();
-                GE.terminarGE();
             } catch (IOException e) {
                 e.printStackTrace();
             }

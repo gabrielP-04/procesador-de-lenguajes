@@ -1,0 +1,10 @@
+function void processValues(int val1, boolean flag) {
+  input val1;	
+  while (flag) {
+    var int processedValue;
+    processedValue = val1 + 20;
+    output('Processed value: ' + processedValue);
+    }
+    val1 = 5; 
+ }
+  return;

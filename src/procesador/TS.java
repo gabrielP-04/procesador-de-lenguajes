@@ -86,12 +86,12 @@ class Symbol {
 public class TS {
 
     private Map<String, Symbol> ts = new HashMap<>();
-    private Map<Integer, String> id_lex = new HashMap<>();
+    private Map<Integer, String> id_lex;
     private TS tsPadre;
     private TS tsGlobal;
-    private int pos = -1;
+    private int pos;
     private int despl;
-    private boolean varGlobal = true;
+    private boolean varGlobal;
 
     private int numberTS;
     private BufferedWriter bw;
@@ -101,14 +101,18 @@ public class TS {
     TS() {
         this.tsGlobal = this;
         this.tsPadre = null;
+        this.id_lex = new HashMap<>();
         this.numberTS = 0;
+        this.pos = 0;
+        this.varGlobal = true;
         bwR = writeFichPadre("ts.txt");
     }
 
-    TS(TS tsGlobal, TS tsPadre, int numberTS, int pos) {
+    TS(TS tsGlobal, TS tsPadre, int numberTS, int pos, Map<Integer, String> id_lex) {
         this.tsPadre = tsPadre;
         this.tsGlobal = tsGlobal;
         this.numberTS = numberTS;
+        this.id_lex = new HashMap<>(id_lex);
         this.pos = pos;
         this.varGlobal = false;
         bw = writeFich("ts.txt");
@@ -154,7 +158,7 @@ public class TS {
     }
 
     public int addSymbol(String lex) {
-        pos++;
+        int p = pos;
         if (tsPadre == null) {
             ts.put(lex, new Symbol(lex, pos, true));
             id_lex.put(pos, lex);
@@ -162,8 +166,9 @@ public class TS {
             ts.put(lex, new Symbol(lex, pos, false));
             id_lex.put(pos, lex);
         }
-        
-        return pos;
+        pos++;
+
+        return p;
     }
 
     public int addSymbolGlobal(String lex) {
@@ -171,7 +176,7 @@ public class TS {
     }
 
     public TS creatTSChild() {
-        TS tsChild = new TS(tsGlobal, this, numberTS + 1, pos);
+        TS tsChild = new TS(tsGlobal, this, numberTS + 1, pos, id_lex);
         return tsChild;
     }
 
@@ -197,8 +202,14 @@ public class TS {
     }
 
     private Symbol getSymbol(int pos) {
-        Symbol symbol = ts.get(id_lex.get(pos));
-        this.varGlobal = symbol.getGlobal();
+        String lex = id_lex.get(pos);
+        Symbol symbol = null;
+
+        if (ts.containsKey(lex))
+            symbol = ts.get(lex);
+        else if (tsPadre != null)
+            symbol = tsPadre.getSymbol(pos);
+
         return symbol;
     }
 
@@ -281,12 +292,12 @@ public class TS {
                 if (s.getTipoParam().equals(new Tipo("producto"))) {
                     List<Tipo> listaParam = s.getTipoParam().getProducto();
                     int i = 1;
-                    for (Tipo tparam : listaParam){
+                    for (Tipo tparam : listaParam) {
                         token.append("\t+ numParam: '" + listaParam.size() + "\n");
                         token.append("\t\t+ TipoParam" + i + ": '" + tparam + "'\n");
                         i++;
                     }
-                } else if(s.getTipoParam().equals(new Tipo("vacio"))){
+                } else if (s.getTipoParam().equals(new Tipo("vacio"))) {
                     token.append("\t+ numParam: 0\n");
                     token.append("\t\t+ TipoParam: vacío'\n");
 

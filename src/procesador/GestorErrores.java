@@ -16,7 +16,6 @@ public class GestorErrores {
 
     GestorErrores(){
         bwErrores = writeFich("errores.txt");
-        bwErrores = writeFich("errores.txt");
         try {
             bwErrores.write("Errores analizador lexico:\n");
         } catch (IOException e) {
@@ -183,6 +182,10 @@ public class GestorErrores {
             case 9: 
                 message += "El tipo que devuelve la funcion no es correcto en la posicion " + puntero + " de la linea " + linea + "\n";
                 break;
+            
+            case 10:
+            message += "La sentenica return está mal ubicado en la posicion " + puntero + " de la linea " + linea + "\n";
+            break;
                 
             default:
                 break;
@@ -201,8 +204,8 @@ public class GestorErrores {
     public void terminarGE() throws IOException{
         if(!error){
                 bwErrores.write("\tSuccess!");
-                bwErrores.close();
         }
+        bwErrores.close();
     }
 
 }
