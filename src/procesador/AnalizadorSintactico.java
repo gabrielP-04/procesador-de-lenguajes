@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-
 public class AnalizadorSintactico {
 
     // private final int OPCION_RUTA = 0; //0 gabi , 1 María
@@ -36,10 +35,19 @@ public class AnalizadorSintactico {
 
     AnalizadorSintactico(String fichToRead) {
 
+        // Se inizializa el Analizador Léxico y gestor de errores
         aLex = new AnalizadorLexico(fichToRead);
         GE = aLex.getGE();
-        bwParse = writeFich("parse.txt");
 
+        try {
+            bwParse = writeFich("parse.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Se inicializan los conjuntos first y follow de los caracteres no terminales
+
+        // ---------------------------P-----------------------------
         List<TokenType> first = Arrays.asList(TokenType.finFich, TokenType.PRfun, TokenType.id,
                 TokenType.PRif, TokenType.PRinput, TokenType.PRoutput,
                 TokenType.PRreturn, TokenType.PRvar, TokenType.PRwhile);
@@ -48,6 +56,7 @@ public class AnalizadorSintactico {
         NoTerminal noTerminal = new NoTerminal(first, follow);
         noTerminales.put('P', noTerminal);
 
+        // ---------------------------B-----------------------------
         first = Arrays.asList(TokenType.id, TokenType.PRif, TokenType.PRinput, TokenType.PRoutput,
                 TokenType.PRreturn, TokenType.PRvar, TokenType.PRwhile);
         follow = Arrays.asList(TokenType.finFich, TokenType.PRfun, TokenType.id,
@@ -57,12 +66,14 @@ public class AnalizadorSintactico {
         noTerminal = new NoTerminal(first, follow);
         noTerminales.put('B', noTerminal);
 
+        // ---------------------------T-----------------------------
         first = Arrays.asList(TokenType.PRint, TokenType.PRboolean, TokenType.PRstring);
         follow = Arrays.asList(TokenType.id);
 
         noTerminal = new NoTerminal(first, follow);
         noTerminales.put('T', noTerminal);
 
+        // ---------------------------S-----------------------------
         first = Arrays.asList(TokenType.id, TokenType.PRinput, TokenType.PRoutput, TokenType.PRreturn);
         follow = Arrays.asList(TokenType.finFich, TokenType.PRfun, TokenType.id,
                 TokenType.PRif, TokenType.PRinput, TokenType.PRoutput,
@@ -71,6 +82,7 @@ public class AnalizadorSintactico {
         noTerminal = new NoTerminal(first, follow);
         noTerminales.put('S', noTerminal);
 
+        // ---------------------------S1-----------------------------
         first = Arrays.asList(TokenType.opAsig, TokenType.opAsigDiv, TokenType.paren);
         follow = Arrays.asList(TokenType.finFich, TokenType.PRfun, TokenType.id,
                 TokenType.PRif, TokenType.PRinput, TokenType.PRoutput,
@@ -79,24 +91,28 @@ public class AnalizadorSintactico {
         noTerminal = new NoTerminal(first, follow);
         noTerminales.put('s', noTerminal); // S1
 
+        // ---------------------------L-----------------------------
         first = Arrays.asList(TokenType.paren, TokenType.entero, TokenType.cadena, TokenType.id);
         follow = Arrays.asList(TokenType.paren);
 
         noTerminal = new NoTerminal(first, follow);
         noTerminales.put('L', noTerminal);
 
+        // ---------------------------Q-----------------------------
         first = Arrays.asList(TokenType.coma);
         follow = Arrays.asList(TokenType.paren);
 
         noTerminal = new NoTerminal(first, follow);
         noTerminales.put('Q', noTerminal);
 
+        // ---------------------------X-----------------------------
         first = Arrays.asList(TokenType.paren, TokenType.entero, TokenType.cadena, TokenType.id);
         follow = Arrays.asList(TokenType.puntoComa);
 
         noTerminal = new NoTerminal(first, follow);
         noTerminales.put('X', noTerminal);
 
+        // ---------------------------F-----------------------------
         first = Arrays.asList(TokenType.PRfun);
         follow = Arrays.asList(TokenType.finFich, TokenType.PRfun, TokenType.id,
                 TokenType.PRif, TokenType.PRinput, TokenType.PRoutput,
@@ -105,24 +121,28 @@ public class AnalizadorSintactico {
         noTerminal = new NoTerminal(first, follow);
         noTerminales.put('F', noTerminal);
 
+        // ---------------------------H-----------------------------
         first = Arrays.asList(TokenType.PRint, TokenType.PRboolean, TokenType.PRstring, TokenType.PRvoid);
         follow = Arrays.asList(TokenType.id);
 
         noTerminal = new NoTerminal(first, follow);
         noTerminales.put('H', noTerminal);
 
+        // ---------------------------A-----------------------------
         first = Arrays.asList(TokenType.PRint, TokenType.PRboolean, TokenType.PRstring, TokenType.PRvoid);
         follow = Arrays.asList(TokenType.paren);
 
         noTerminal = new NoTerminal(first, follow);
         noTerminales.put('A', noTerminal);
 
+        // ---------------------------K-----------------------------
         first = Arrays.asList(TokenType.coma);
         follow = Arrays.asList(TokenType.paren);
 
         noTerminal = new NoTerminal(first, follow);
         noTerminales.put('K', noTerminal);
 
+        // ---------------------------C-----------------------------
         first = Arrays.asList(TokenType.id, TokenType.PRif, TokenType.PRinput, TokenType.PRoutput,
                 TokenType.PRreturn, TokenType.PRvar, TokenType.PRwhile);
         follow = Arrays.asList(TokenType.llave);
@@ -130,42 +150,49 @@ public class AnalizadorSintactico {
         noTerminal = new NoTerminal(first, follow);
         noTerminales.put('C', noTerminal);
 
+        // ---------------------------E-----------------------------
         first = Arrays.asList(TokenType.paren, TokenType.entero, TokenType.cadena, TokenType.id);
         follow = Arrays.asList(TokenType.puntoComa, TokenType.coma, TokenType.paren);
 
         noTerminal = new NoTerminal(first, follow);
         noTerminales.put('E', noTerminal);
 
+        // ---------------------------E1-----------------------------
         first = Arrays.asList(TokenType.opOr);
         follow = Arrays.asList(TokenType.puntoComa, TokenType.coma, TokenType.paren);
 
         noTerminal = new NoTerminal(first, follow);
         noTerminales.put('e', noTerminal); // E1
 
+        // --------------------------------------------------------
         first = Arrays.asList(TokenType.paren, TokenType.entero, TokenType.cadena, TokenType.id);
         follow = Arrays.asList(TokenType.puntoComa, TokenType.coma, TokenType.paren, TokenType.opOr);
 
         noTerminal = new NoTerminal(first, follow);
         noTerminales.put('R', noTerminal);
 
+        // ---------------------------R1-----------------------------
         first = Arrays.asList(TokenType.opIgual);
         follow = Arrays.asList(TokenType.puntoComa, TokenType.coma, TokenType.paren, TokenType.opOr);
 
         noTerminal = new NoTerminal(first, follow);
         noTerminales.put('r', noTerminal); // R1
 
+        // ---------------------------U-----------------------------
         first = Arrays.asList(TokenType.paren, TokenType.entero, TokenType.cadena, TokenType.id);
         follow = Arrays.asList(TokenType.puntoComa, TokenType.coma, TokenType.paren, TokenType.opOr, TokenType.opIgual);
 
         noTerminal = new NoTerminal(first, follow);
         noTerminales.put('U', noTerminal);
 
+        // ---------------------------U1-----------------------------
         first = Arrays.asList(TokenType.opSuma);
         follow = Arrays.asList(TokenType.puntoComa, TokenType.coma, TokenType.paren, TokenType.opOr, TokenType.opIgual);
 
         noTerminal = new NoTerminal(first, follow);
         noTerminales.put('u', noTerminal); // U1
 
+        // ---------------------------V-----------------------------
         first = Arrays.asList(TokenType.paren, TokenType.entero, TokenType.cadena, TokenType.id);
         follow = Arrays.asList(TokenType.puntoComa, TokenType.coma, TokenType.paren, TokenType.opOr, TokenType.opIgual,
                 TokenType.opSuma);
@@ -173,6 +200,7 @@ public class AnalizadorSintactico {
         noTerminal = new NoTerminal(first, follow);
         noTerminales.put('V', noTerminal);
 
+        // ---------------------------V1-----------------------------
         first = Arrays.asList(null, TokenType.paren);
         follow = Arrays.asList(TokenType.puntoComa, TokenType.coma, TokenType.paren, TokenType.opOr, TokenType.opIgual,
                 TokenType.opSuma);
@@ -182,7 +210,7 @@ public class AnalizadorSintactico {
 
     }
 
-    String ASin() {
+    String analisis() {
         this.sigToken = aLex.getTokens();
         p1();
 
@@ -199,13 +227,20 @@ public class AnalizadorSintactico {
         return parse;
     }
 
-    private BufferedWriter writeFich(String nameFich) {
+    /**
+     * Método para crear un fichero de escritura en el directorio data del
+     * proyecto.
+     * Se usará para crear el fichero de parse
+     * 
+     * @param nameFich Nombre del fichero
+     * @return Buffer donde se introducirá los caracteres para que se escriban en el
+     *         fichero.
+     * 
+     */
+    private BufferedWriter writeFich(String nameFich) throws IOException {
         FileWriter fw = null;
-        try {
-            fw = new FileWriter(cwd + "/data/aSin/" + nameFich);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } // crea FileWriter para crear el archivo de salida
+        fw = new FileWriter(cwd + "/data/aSin/" + nameFich);
+        // crea FileWriter para crear el archivo de salida
         BufferedWriter bw = new BufferedWriter(fw);
         return bw;
     }
@@ -487,7 +522,7 @@ public class AnalizadorSintactico {
 
             } else if (ts.buscarTipoParamTS(pos).equals(tipo)) {
                 return ts.buscarTipoRet(pos);
-               
+
             } else {
                 GE.selgErrorAnalizador("Sm-4", aLex.getPuntero(), aLex.getLinea(), sigToken);
                 return new Tipo("tipoError");
@@ -534,10 +569,10 @@ public class AnalizadorSintactico {
             equiparar(TokenType.puntoComa);
 
             if (ts.buscarTipoTS(pos).equals(entero) || ts.buscarTipoTS(pos).equals(entero)) {
-                return new Tipo[] { tipoOk, vacio };
+                return new Tipo[] { tipoOk, null };
             } else {
                 GE.selgErrorAnalizador("Sm-5", aLex.getPuntero(), aLex.getLinea(), sigToken);
-                return new Tipo[] { tipoError, vacio };
+                return new Tipo[] { tipoError, null };
             }
 
         } else if (sigToken.getType().equals(TokenType.PRoutput)) {
@@ -550,11 +585,11 @@ public class AnalizadorSintactico {
             equiparar(TokenType.puntoComa);
 
             if (tipo.equals(entero) || tipo.equals(cadena)) {
-                return new Tipo[] { tipoOk, vacio };
+                return new Tipo[] { tipoOk, null };
 
             } else {
                 GE.selgErrorAnalizador("Sm-5", aLex.getPuntero(), aLex.getLinea(), sigToken);
-                return new Tipo[] { tipoError, vacio };
+                return new Tipo[] { tipoError, null };
             }
 
         } else if (sigToken.getType().equals(TokenType.PRreturn)) {
@@ -567,10 +602,10 @@ public class AnalizadorSintactico {
             equiparar(TokenType.puntoComa);
 
             if (!tipo.equals(tipoError)) {
-                return new Tipo[] { tipoOk, vacio };
+                return new Tipo[] { tipoOk, tipo };
 
             } else {
-                return new Tipo[] { tipoError, vacio };
+                return new Tipo[] { tipoError, tipo };
             }
 
         } else if (sigToken.getType().equals(TokenType.id)) {
@@ -584,18 +619,18 @@ public class AnalizadorSintactico {
 
             if (ts.buscarTipoTS(pos).equals(funcion)) { // id.tipo == funcion
                 if (ts.buscarTipoParamTS(pos).equals(tipo)) { // id.tipoParam == s1.tipo
-                    return new Tipo[] { tipoOk, vacio };
+                    return new Tipo[] { tipoOk, null };
 
                 } else {
                     GE.selgErrorAnalizador("Sm-4", aLex.getPuntero(), aLex.getLinea(), sigToken);
                     return new Tipo[] { tipoError, vacio };
                 }
             } else if (ts.buscarTipoTS(pos).equals(tipo)) {
-                return new Tipo[] { tipoOk, vacio };
+                return new Tipo[] { tipoOk, null };
 
             } else {
                 GE.selgErrorAnalizador("Sm-5", aLex.getPuntero(), aLex.getLinea(), sigToken);
-                return new Tipo[] { tipoError, vacio };
+                return new Tipo[] { tipoError, null };
             }
 
         } else {
@@ -748,7 +783,7 @@ public class AnalizadorSintactico {
             Tipo tipo;
 
             equiparar(TokenType.PRvar);
-            
+
             tipo = t();
             aLex.setZonaDeclarativa(false);
 
@@ -762,7 +797,7 @@ public class AnalizadorSintactico {
 
             equiparar(TokenType.puntoComa);
 
-            return vacio;
+            return null;
         }
 
         else if (sigToken.getType().equals(TokenType.PRwhile)) {
@@ -837,7 +872,6 @@ public class AnalizadorSintactico {
             Tipo tipo2;
             Tipo tipo3;
 
-            
             equiparar(TokenType.PRfun);
             tipo1 = h();
             aLex.setZonaDeclarativa(false);
@@ -848,7 +882,6 @@ public class AnalizadorSintactico {
 
             ts = ts.creatTSChild();
             aLex.setTs(ts);
-
 
             equiparar(TokenType.paren, 1);
             tipo2 = a();
@@ -862,12 +895,11 @@ public class AnalizadorSintactico {
 
             equiparar(TokenType.paren, 2);
 
-
             equiparar(TokenType.llave, 1);
             tipo3 = c();
             equiparar(TokenType.llave, 2);
 
-            if (!tipo1.equals(tipo3)) {
+            if (!tipo1.equals(tipo3) && !(tipo1.equals(vacio) && tipo3 == null)) {
                 if (tipo1.equals(vacio)) {
                     GE.selgErrorAnalizador("Sm-8", aLex.getPuntero(), aLex.getLinea(), sigToken);
 
@@ -994,13 +1026,13 @@ public class AnalizadorSintactico {
             tipoB = b();
             tipoC = c();
 
-            if (tipoB.equals(tipoC)) {
-                return tipoB;
-
-            } else if (tipoB.equals(vacio)) {
+            if (tipoB == null || tipoB.equals(vacio)) {
                 return tipoC;
 
-            } else if (tipoC.equals(vacio)) {
+            } else if (tipoC == null || tipoC.equals(vacio)) {
+                return tipoB;
+
+            } else if (tipoB.equals(tipoC)) {
                 return tipoB;
 
             } else {
@@ -1010,7 +1042,7 @@ public class AnalizadorSintactico {
         } else if (isFollow.test('C')) {
             parse += " 47";
 
-            return vacio;
+            return null;
 
         } else {
             GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
@@ -1022,16 +1054,14 @@ public class AnalizadorSintactico {
         if (tipo.equals(sigToken.getType())) {
             this.sigToken = aLex.getTokens();
         } else
-            GE.selgErrorAnalizador("Sx-" + tipo.toString(),aLex.getPuntero(),aLex.getLinea());
+            GE.selgErrorAnalizador("Sx-" + tipo.toString(), aLex.getPuntero(), aLex.getLinea());
     }
 
     private void equiparar(TokenType tipo, int atributo) {
         if (tipo.equals(sigToken.getType()) && (int) sigToken.getAtribute() == atributo) {
             this.sigToken = aLex.getTokens();
         } else
-        GE.selgErrorAnalizador("Sx-" + tipo.toString() + "_" + atributo,aLex.getPuntero(),aLex.getLinea());
+            GE.selgErrorAnalizador("Sx-" + tipo.toString() + "_" + atributo, aLex.getPuntero(), aLex.getLinea());
     }
-
-    
 
 }

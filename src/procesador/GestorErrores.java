@@ -7,20 +7,17 @@ import java.io.IOException;
 public class GestorErrores {
 
     private BufferedWriter bwErrores;
-    private boolean error = false;
     private String cwd = System.getProperty("user.dir");
-    private int linea = 0;
-    private int puntero = 0;
+
     private Token token;
     private char car;
+    private boolean error = false;
+
+    private int linea;
+    private int puntero;
 
     GestorErrores(){
         bwErrores = writeFich("errores.txt");
-        try {
-            bwErrores.write("Errores analizador lexico:\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void selgErrorAnalizador (String codigo, int puntero, int linea){

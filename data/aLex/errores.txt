@@ -1,4 +1,1 @@
-Errores analizador lexico:
-ERROR SEMÁNTICO:(3): Operación + solo definido para tipos enteros en la posicion 48 de la linea 6
-ERROR SEMÁNTICO:(5): La sentencia input solo puede estar operando con una variable tipo entero o cadena en la posicion 5 de la linea 7
-ERROR SEMÁNTICO:(10): La sentenica return está mal ubicado en la posicion 0 de la linea 11
+	Success!

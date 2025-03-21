@@ -5,43 +5,45 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
 
 public class AnalizadorLexico {
 
+    // Variables para manejar el fichero
     private int linea = 0;
     private int puntero = 0;
+
+    // Variables internas del ALex
     private int state = 0;
     private char[] string;
     private char c;
 
+    // Varibales para ASin
     private Token token;
-    private boolean zonaDeclarativa = false; // Variable para viene del AS
+    private boolean zonaDeclarativa = false;
 
+    // Tabla de símbolos
     private TS ts = new TS();
 
+    // Variables de lectura y escritura del fichero
     private BufferedReader br;
     private BufferedWriter bwTokens;
     private String cwd = System.getProperty("user.dir");
 
     private GestorErrores GE = new GestorErrores();
 
-    private Set<String> palabrasReservas = new HashSet<>();
-
-    final String[] PALABRAS_RESERVADAS = {
-            "boolean", "function", "if", "input", "int", "output",
-            "return", "string", "var", "void", "while"
-    };
+    private Set<String> palabrasReservas = Set.of("boolean", "function", "if", "input", "int", "output",
+            "return", "string", "var", "void", "while");
 
     AnalizadorLexico(String fichToRead) {
-        br = openRFich(fichToRead);
-        bwTokens = writeFich("tokens.txt");
-        string = readFich().toCharArray();
-
-        for (String word : PALABRAS_RESERVADAS) {
-            palabrasReservas.add(word);
+        try {
+            br = openRFich(fichToRead);
+            bwTokens = writeFich("tokens.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        string = readFich().toCharArray();
     }
 
     public int getPuntero() {
@@ -59,11 +61,12 @@ public class AnalizadorLexico {
     public TS getTs() {
         return ts;
     }
+
     public GestorErrores getGE() {
         return GE;
     }
 
-    public void setZonaDeclarativa(boolean zonaDeclarativa) { // funcion que sustituye a analizador S
+    public void setZonaDeclarativa(boolean zonaDeclarativa) {
         this.zonaDeclarativa = zonaDeclarativa;
     }
 
@@ -83,16 +86,11 @@ public class AnalizadorLexico {
      * 
      */
 
-    private BufferedReader openRFich(String path) {
+    private BufferedReader openRFich(String path) throws IOException {
         BufferedReader br = null;
-        try {
-            // Abrir archivo de entrada para lectura
-            FileReader fr = new FileReader(path); // crea FileReader para el archivo de entrada
-            br = new BufferedReader(fr); // usamos BufferReader para leer el archivo de manera eficiente
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        }
+        // Abrir archivo de entrada para lectura
+        FileReader fr = new FileReader(path); // crea FileReader para el archivo de entrada
+        br = new BufferedReader(fr); // usamos BufferReader para leer el archivo de manera eficiente
         return br;
     }
 
@@ -103,20 +101,43 @@ public class AnalizadorLexico {
      */
 
     private String readFich() {
-        String string = ""; // si quisieramos leer una linea creariamos una variable String para almacenarla
-        // es un int porque la funcion read devuelve el caracter leido en formato ASCII
+        String string = "";
         try {
-            string = br.readLine();
-            if (string != null)
-                string += "\n";
-            linea++;
-
-        } catch (IOException e) {
+            string = br.readLine(); // Lee la línea
+        } catch (Exception e) {
             e.printStackTrace();
         }
+        if (string != null)
+            string += "\n"; // REVISAR
+
+        linea++;
+
         return string;
     }
 
+    /**
+     * Método para crear un fichero de escritura en el directorio data del
+     * proyecto.
+     * Se usará para crear el fichero de tokens
+     * 
+     * @param nameFich Nombre del fichero
+     * @return Buffer donde se introducirá los caracteres para que se escriban en el
+     *         fichero.
+     * 
+     */
+    private BufferedWriter writeFich(String nameFich) throws IOException {
+        FileWriter fw = null;
+        fw = new FileWriter(cwd + "/data/aLex/" + nameFich);
+        // crea FileWriter para crear el archivo de salida
+        BufferedWriter bw = new BufferedWriter(fw);
+        return bw;
+    }
+
+    /**
+     * Función principal del analizador léxico.
+     * 
+     * @return Token del fichero
+     */
     Token getTokens() {
         token = ALex();
         if (token == null) {
@@ -141,27 +162,6 @@ public class AnalizadorLexico {
 
             return token;
         }
-    }
-
-    /**
-     * Método para crear un fichero para escritura en el directorio data del
-     * proyecto.
-     * Se usará para crear el fichero de tokens y la tabla de símbolos
-     * 
-     * @param nameFich Nombre del fichero
-     * @return Buffer donde se introducirá los caracteres para que se escriban en el
-     *         fichero.
-     * 
-     */
-    private BufferedWriter writeFich(String nameFich) {
-        FileWriter fw = null;
-        try {
-            fw = new FileWriter(cwd + "/data/aLex/" + nameFich);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } // crea FileWriter para crear el archivo de salida
-        BufferedWriter bw = new BufferedWriter(fw);
-        return bw;
     }
 
     private void getChar() {
@@ -254,7 +254,7 @@ public class AnalizadorLexico {
                         if (index >= 0)
                             return token = new Token(TokenType.values()[index]);
                         else if (zonaDeclarativa) {
-                            p = ts.findSymbolCurrent(lex); //tabla actual?
+                            p = ts.findSymbolCurrent(lex); // tabla actual?
                             if (p == -1) {
                                 p = ts.addSymbol(lex);
                                 return token = new Token(TokenType.id, p);

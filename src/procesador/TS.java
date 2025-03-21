@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -85,7 +86,7 @@ class Symbol {
 
 public class TS {
 
-    private Map<String, Symbol> ts = new HashMap<>();
+    private Map<String, Symbol> ts = new LinkedHashMap<>();
     private Map<Integer, String> id_lex;
     private TS tsPadre;
     private TS tsGlobal;

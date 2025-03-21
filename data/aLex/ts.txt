@@ -1,24 +1,22 @@
 CONTENIDO DE LA TABLA #0 :
 
- * LEXEMA: 'processValues'
-   ATRIBUTOS :
-	+ tipo: 'funcion'
-	+ despl: 0
----------   ---------
-CONTENIDO DE LA TABLA #1 :
-
- * LEXEMA: 'flag'
-   ATRIBUTOS :
-	+ tipo: 'boolean'
-	+ despl: 1
----------   ---------
- * LEXEMA: 'val1'
+ * LEXEMA: 'a'
    ATRIBUTOS :
 	+ tipo: 'entero'
 	+ despl: 0
 ---------   ---------
- * LEXEMA: 'processedValue'
+ * LEXEMA: 'b'
+   ATRIBUTOS :
+	+ tipo: 'entero'
+	+ despl: 1
+---------   ---------
+ * LEXEMA: 'c'
    ATRIBUTOS :
 	+ tipo: 'entero'
 	+ despl: 2
+---------   ---------
+ * LEXEMA: 'd'
+   ATRIBUTOS :
+	+ tipo: 'entero'
+	+ despl: 3
 ---------   ---------
