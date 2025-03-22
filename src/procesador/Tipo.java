@@ -28,7 +28,7 @@ public class Tipo {
         this.producto.add(producto);
     }
 
-    Tipo(String tipo, int ancho){
+    Tipo(String tipo, int ancho) {
         if (tipo.equals("entero") || tipo.equals("boolean") || tipo.equals("cadena")) {
             this.tipo = tipo;
 
@@ -50,23 +50,32 @@ public class Tipo {
         return producto;
     }
 
+    public String toString(){
+        return tipo;
+    }
+
     private boolean esTipoValido(String tipo) {
         return tipo.equals("entero") || tipo.equals("boolean") ||
                 tipo.equals("cadena") || tipo.equals("vacio") ||
-                tipo.equals("funcion") || tipo.equals("tipoOk") || tipo.equals("tipoError");
+                tipo.equals("funcion") || tipo.equals("producto") ||
+                tipo.equals("tipoOk") || tipo.equals("tipoError");
     }
 
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
 
-        if (obj == null || !(obj instanceof Tipo) || !(obj instanceof String))
+        if (obj == null || (!(obj instanceof Tipo) && !(obj instanceof String)))
             return false;
 
         Tipo tipo = (Tipo) obj;
         if (tipo.getTipo().equals(this.tipo)) {
             if (tipo.getTipo().equals("producto")) {
-                return equalsProducto(tipo.producto);
+                if (tipo.producto.isEmpty()) {
+                    return true;
+                } else {
+                    return equalsProducto(tipo.producto);
+                }
             }
             return true;
 

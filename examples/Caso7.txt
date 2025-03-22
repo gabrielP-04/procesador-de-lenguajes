@@ -1,0 +1,10 @@
+var int x;
+var int y;
+x = 5;
+y = 10;
+if (x = y) 
+    output 'Son iguales';
+
+var int resultado = 0;
+resultado = x - y;
+output ('La diferencia es' + resultado);

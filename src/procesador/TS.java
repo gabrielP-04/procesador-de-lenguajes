@@ -12,7 +12,7 @@ import java.util.Map;
 class Symbol {
 
     private String lexema;
-    private Tipo tipo;
+    private Tipo tipo = new Tipo("entero");
     private int deslp;
     private Tipo tipoParamFun;
     private Tipo tipoRetorno;
@@ -88,20 +88,19 @@ public class TS {
 
     private Map<String, Symbol> ts = new LinkedHashMap<>();
     private Map<Integer, String> id_lex;
-    private TS tsPadre;
+
     private TS tsGlobal;
     private int pos;
     private int despl;
+    private int numberTS;
     private boolean varGlobal;
 
-    private int numberTS;
     private BufferedWriter bw;
     private String cwd = System.getProperty("user.dir");
     private RandomAccessFile bwR;
 
     TS() {
         this.tsGlobal = this;
-        this.tsPadre = null;
         this.id_lex = new HashMap<>();
         this.numberTS = 0;
         this.pos = 0;
@@ -110,7 +109,6 @@ public class TS {
     }
 
     TS(TS tsGlobal, TS tsPadre, int numberTS, int pos, Map<Integer, String> id_lex) {
-        this.tsPadre = tsPadre;
         this.tsGlobal = tsGlobal;
         this.numberTS = numberTS;
         this.id_lex = new HashMap<>(id_lex);
@@ -124,7 +122,7 @@ public class TS {
     }
 
     public void setDeslp(int despl) {
-        if (varGlobal && tsPadre != null) {
+        if (varGlobal && !isTSGlobal()) {
             tsGlobal.setDeslp(despl);
         } else {
             this.despl += despl;
@@ -160,7 +158,7 @@ public class TS {
 
     public int addSymbol(String lex) {
         int p = pos;
-        if (tsPadre == null) {
+        if (isTSGlobal()) {
             ts.put(lex, new Symbol(lex, pos, true));
             id_lex.put(pos, lex);
         } else {
@@ -173,7 +171,10 @@ public class TS {
     }
 
     public int addSymbolGlobal(String lex) {
-        return tsGlobal.addSymbol(lex);
+        int pos = tsGlobal.addSymbol(lex);
+        tsGlobal.insertarDespl(pos);
+        tsGlobal.setDeslp(1);
+        return pos;
     }
 
     public TS creatTSChild() {
@@ -181,8 +182,8 @@ public class TS {
         return tsChild;
     }
 
-    public boolean isTSGlobal(TS ts) {
-        return tsPadre == null;
+    public boolean isTSGlobal() {
+        return tsGlobal.equals(this);
     }
 
     public int findSymbolCurrent(String lex) {
@@ -197,8 +198,8 @@ public class TS {
         int pos = -1;
         if (ts.containsKey(lex)) {
             pos = ts.get(lex).getPos();
-        } else if (tsPadre != null)
-            pos = tsPadre.findSymbol(lex);
+        } else if (!isTSGlobal())
+            pos = tsGlobal.findSymbol(lex);
         return pos;
     }
 
@@ -208,8 +209,8 @@ public class TS {
 
         if (ts.containsKey(lex))
             symbol = ts.get(lex);
-        else if (tsPadre != null)
-            symbol = tsPadre.getSymbol(pos);
+        else if (!isTSGlobal())
+            symbol = tsGlobal.getSymbol(pos);
 
         return symbol;
     }
@@ -237,11 +238,7 @@ public class TS {
     public void insertarDespl(int pos) {
         Symbol var = getSymbol(pos);
         if (varGlobal) {
-            if (tsPadre == null) {
-                var.setDeslp(despl);
-            } else {
-                var.setDeslp(tsPadre.getDeslp());
-            }
+            var.setDeslp(tsGlobal.getDeslp());
         } else {
             var.setDeslp(despl);
         }
@@ -267,34 +264,31 @@ public class TS {
         return "Et" + numberTS + "_" + var.getLexema();
     }
 
-    public TS destroyTs() {
+    public TS destroyTs() throws IOException {
         writeTS();
-        try {
-            if (tsPadre == null)
-                bwR.close();
-            else
-                bw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return tsPadre;
+        if (isTSGlobal())
+            bwR.close();
+        else
+            bw.close();
+        return tsGlobal;
     }
 
-    void writeTS() {
+    private void writeTS() throws IOException {
         StringBuilder token = new StringBuilder();
+
+        //Se contruye el la tabla de simbolos
         token.append("CONTENIDO DE LA TABLA #" + numberTS + " :\n\n");
         for (Symbol s : ts.values()) {
             Tipo t = s.getTipo();
             token.append(" * LEXEMA: '" + s.getLexema() + "'\n");
             token.append("   ATRIBUTOS :\n");
             token.append("\t+ tipo: '" + t.getTipo() + "'\n");
-            token.append("\t+ despl: " + s.getDeslp() + "\n");
             if (t.equals(new Tipo("funcion"))) {
                 if (s.getTipoParam().equals(new Tipo("producto"))) {
                     List<Tipo> listaParam = s.getTipoParam().getProducto();
                     int i = 1;
+                    token.append("\t+ numParam: '" + listaParam.size() + "\n");
                     for (Tipo tparam : listaParam) {
-                        token.append("\t+ numParam: '" + listaParam.size() + "\n");
                         token.append("\t\t+ TipoParam" + i + ": '" + tparam + "'\n");
                         i++;
                     }
@@ -308,22 +302,22 @@ public class TS {
                 }
 
                 token.append("\t+ TipoRetorno: '" + s.getTipoRetorno() + "'\n");
-                token.append("\t +EtiqFuncion: " + s.getEtiqFuncion() + "\n");
+                token.append("\t+ EtiqFuncion: " + s.getEtiqFuncion() + "\n");
+            }
+            else {
+                token.append("\t+ despl: " + s.getDeslp() + "\n");
             }
             token.append("---------   ---------\n");
         }
-        try {
-            if (tsPadre == null) {
-                byte[] content = new byte[(int) bwR.length()];
-                bwR.read(content);
-                bwR.seek(0);
-                bwR.write(token.toString().getBytes());
-                bwR.write(content);
-            } else
-                this.bw.write(token.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        if (isTSGlobal()) {
+            byte[] content = new byte[(int) bwR.length()];
+            bwR.read(content);
+            bwR.seek(0);
+            bwR.write(token.toString().getBytes());
+            bwR.write(content);
+        } else
+            this.bw.write(token.toString());
     }
 
 }

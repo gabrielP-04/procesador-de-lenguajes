@@ -35,15 +35,10 @@ public class AnalizadorLexico {
     private Set<String> palabrasReservas = Set.of("boolean", "function", "if", "input", "int", "output",
             "return", "string", "var", "void", "while");
 
-    AnalizadorLexico(String fichToRead) {
-        try {
-            br = openRFich(fichToRead);
-            bwTokens = writeFich("tokens.txt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        string = readFich().toCharArray();
+    AnalizadorLexico(String fichToRead) throws IOException {
+        this.br = openRFich(fichToRead); // abrimos el fichero
+        this.bwTokens = writeFich("tokens.txt"); // Creamos el fichero para tokens
+        this.string = readFich().toCharArray(); // Leemos la primera línea
     }
 
     public int getPuntero() {
@@ -107,8 +102,6 @@ public class AnalizadorLexico {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (string != null)
-            string += "\n"; // REVISAR
 
         linea++;
 
@@ -135,40 +128,34 @@ public class AnalizadorLexico {
 
     /**
      * Función principal del analizador léxico.
+     * Escribe el token en el fichero.
      * 
      * @return Token del fichero
      */
-    Token getTokens() {
+    Token getTokenFich() throws IOException {
         token = ALex();
+
         if (token == null) {
             state = 0;
             return token;
 
         } else if (token.getType() == TokenType.finFich) {
-            try {
-                bwTokens.write(token.toString());
-                br.close();
-                bwTokens.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            bwTokens.write(token.toString());
+            br.close();
+            bwTokens.close();
             return token;
         } else {
-            try {
-                bwTokens.write(token.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            bwTokens.write(token.toString());
 
             return token;
         }
     }
 
-    private void getChar() {
-        c = string[puntero];
-
-    }
-
+    /**
+     * Función que maneja la matriz de estado y las acciones
+     * 
+     * @return Token del fichero
+     */
     Token ALex() {
 
         state = 0;
@@ -178,31 +165,30 @@ public class AnalizadorLexico {
         String lex = "";
         Token token = null;
 
+        // Cambia de línea a al final del array de caracteres
         while (token == null && state != -1) {
             if (puntero >= string.length) {
-                string = null;
                 String str = readFich();
                 if (str != null) {
 
-                    if (str.isEmpty())
+                    if (str.isEmpty()) // Si la línea esta vacía sigue leyendo del fichero.
                         continue;
 
                     string = str.toCharArray();
                 } else {
                     state = 24; // EOF
+                    string = null;
                 }
-
                 puntero = 0;
-
             }
 
             if (string != null) {
-                getChar();
-                char accion = MT_AFD(c);
+                c = string[puntero]; // Obtiene un caracter.
+                char accion = MT_AFD(c); //Verifica la matriz del autámata
 
                 switch (accion) {
                     case 'A':
-                        puntero++;
+                        puntero++; // Avanza el puntero.
                         break;
 
                     case 'B':

@@ -1,0 +1,14 @@
+var string userName;
+var boolean isAdmin;
+
+userName = 'Admin';
+isAdmin = true;
+
+function void greetUser(string name) {
+  while (isAdmin) {
+    output('Welcome, ' + name);
+    isAdmin = false; 
+  }
+}
+
+greetUser(userName);

@@ -1,0 +1,9 @@
+function void checkInput(boolean isValid, string message, int number) {
+  var string result;
+  while (number || isValid) {
+      result = 'Processing: ' + message;
+      output(result);
+    }
+    number = 10;
+  }
+  return; /* fin de la función */

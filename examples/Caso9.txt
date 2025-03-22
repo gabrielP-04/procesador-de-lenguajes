@@ -1,0 +1,14 @@
+var int count;
+count = 5;
+
+var string count;
+
+function int calcularDiv(int a, int b) {
+  var int total;
+  total = a;
+  total /= b;
+  return total;
+}
+
+var int total;
+total = calculateDiv(3, 7);

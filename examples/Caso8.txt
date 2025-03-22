@@ -1,0 +1,13 @@
+var int contador;
+var string mensaje = 'Este es un mensaje extremadamente largo que supera los 64 caracteres permitidos para una cadena en este lenguaje JS--';
+
+function boolean validaInput (int numero) {
+  if (numero == 0) 
+    output 'El número es cero';
+
+contador = contador + 1;
+
+while (contador != 0) {  
+  output contador;
+  output mensaje;
+}

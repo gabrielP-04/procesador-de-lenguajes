@@ -9,43 +9,36 @@ public class GestorErrores {
     private BufferedWriter bwErrores;
     private String cwd = System.getProperty("user.dir");
 
-    private Token token;
-    private char car;
     private boolean error = false;
 
     private int linea;
     private int puntero;
 
-    GestorErrores(){
+    GestorErrores() {
         bwErrores = writeFich("errores.txt");
     }
 
-    public void selgErrorAnalizador (String codigo, int puntero, int linea){
-        this.puntero = puntero;
+    public void selgErrorAnalizador(String codigo, int puntero, int linea) {
+        this.puntero = puntero + 1;
         this.linea = linea;
         gErrorAnalizador(codigo);
     }
 
-    public void selgErrorAnalizador (String codigo, int puntero, int linea, Token token){
-        this.puntero = puntero;
-        this.linea = linea;
-        this.token = token;
-        gErrorAnalizador(codigo);
-    }
-
-    public void selgErrorAnalizador (String codigo){
-        gErrorAnalizador(codigo);
-    }
-
-    private void gErrorAnalizador (String codigo){
+    private void gErrorAnalizador(String codigo) {
+        error = true;
         String[] partes = codigo.split("-");
         switch (analizador(partes[0])) {
             case 1:
                 gErrorALex(partes[1]);
-                
+
                 break;
             case 2:
                 gErrorSin(partes[1]);
+                try {
+                    terminarGE();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 throw new RuntimeException("Error sinctáctico");
             case 3:
                 gErrorASem(partes[1]);
@@ -56,14 +49,14 @@ public class GestorErrores {
         }
     }
 
-    private int analizador(String tipoAnalizador){
+    private int analizador(String tipoAnalizador) {
         if (tipoAnalizador.equals("Lx")) {
             return 1;
-        } else if (tipoAnalizador.equals("Sx")){
+        } else if (tipoAnalizador.equals("Sx")) {
             return 2;
         } else if (tipoAnalizador.equals("Sm")) {
             return 3;
-        } else{
+        } else {
             return -1;
         }
     }
@@ -88,7 +81,7 @@ public class GestorErrores {
         BufferedWriter bw = new BufferedWriter(fw);
         return bw;
     }
-    
+
     private void gErrorALex(String num) {
         error = true;
         int code = Integer.parseInt(num);
@@ -103,11 +96,13 @@ public class GestorErrores {
                 message += "cadena demasiado larga en la posición " + puntero + " de la linea " + linea + "\n";
                 break;
             case 52:
-                message += "variable ya declarada previamente en la posicion " + puntero + " de la linea " + linea + "\n";
+                message += "variable ya declarada previamente en la posicion " + puntero + " de la linea " + linea
+                        + "\n";
                 break;
             default:
                 message += "caracter no reconocido en la posición " + puntero + " de la linea " + linea + "\n";
-                break;
+                throw new RuntimeException("Error Léxico");
+
         }
 
         try {
@@ -115,21 +110,17 @@ public class GestorErrores {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
-        
+
     }
 
     private void gErrorSin(String codigo) {
 
         String message = "ERROR SINTÁCTICO: ";
 
-        if (codigo.equals("1")) {
-            message +=  token + "inesperado en la posicion "
-                + puntero + " de la línea " + linea + ".\n";
-        }
-        else{
-        message += car + " esperado al contrario de " + token + " en a posición "
-        + puntero + " de la línea " + linea + ".\n";
+        if (codigo.equals("0")) {
+            message += "Caracter inesperado en la posicion " + puntero + " de la línea " + linea + ".\n";
+        } else {
+            message += codigo + " esperado en la posición " + puntero + " de la línea " + linea + ".\n";
         }
 
         try {
@@ -137,7 +128,7 @@ public class GestorErrores {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
     }
 
     private void gErrorASem(String num) {
@@ -148,42 +139,57 @@ public class GestorErrores {
         switch (code) {
 
             case 1:
-                message += "Operación || solo definido para tipos lógicos en la posición " + puntero + " de la linea " + linea + "\n";
+                message += "Operación || solo definido para tipos lógicos en la posición " + puntero + " de la linea "
+                        + linea + "\n";
                 break;
             case 2:
-                message += "Operación == solo definido para tipos enteros en la posición " + puntero + " de la linea " + linea + "\n";
+                message += "Operación == solo definido para tipos enteros en la posición " + puntero + " de la linea "
+                        + linea + "\n";
                 break;
             case 3:
-                message += "Operación + solo definido para tipos enteros en la posicion " + puntero + " de la linea " + linea + "\n";
+                message += "Operación + solo definido para tipos enteros en la posicion " + puntero + " de la linea "
+                        + linea + "\n";
                 break;
 
-            case 4: 
-                message += "Los parámetros no coinciden con la llamada de la función en la posicion " + puntero + " de la linea " + linea + "\n";
+            case 4:
+                message += "Los parámetros no coinciden con la llamada de la función en la posicion " + puntero
+                        + " de la linea " + linea + "\n";
                 break;
-            case 5: 
-                message += "La sentencia input solo puede estar operando con una variable tipo entero o cadena en la posicion " + puntero + " de la linea " + linea + "\n";
+            case 5:
+                message += "La sentencias input y output solo puede estar operando con una variable tipo entero o cadena en la posicion "
+                        + puntero + " de la linea " + linea + "\n";
                 break;
 
-            case 6: 
+            case 6:
                 message += "Se esperaba un tipo boolean en la posicion " + puntero + " de la linea " + linea + "\n";
                 break;
 
-            case 7: 
-                message += "La sentencia while debe tener una condicion de tipo lógico en la posicion " + puntero + " de la linea " + linea + "\n";
+            case 7:
+                message += "La sentencia while debe tener una condicion de tipo lógico en la posicion " + puntero
+                        + " de la linea " + linea + "\n";
                 break;
 
-            case 8: 
+            case 8:
                 message += "La funcion no devuelve nada en la posicion " + puntero + " de la linea " + linea + "\n";
                 break;
 
-            case 9: 
-                message += "El tipo que devuelve la funcion no es correcto en la posicion " + puntero + " de la linea " + linea + "\n";
+            case 9:
+                message += "El tipo que devuelve la funcion no es correcto en la posicion " + puntero + " de la linea "
+                        + linea + "\n";
                 break;
-            
+
             case 10:
-            message += "La sentenica return está mal ubicado en la posicion " + puntero + " de la linea " + linea + "\n";
-            break;
-                
+                message += "La sentencia return está mal ubicado en la posicion " + puntero + " de la linea " + linea
+                        + "\n";
+                break;
+
+            case 11:
+                message += "La asignacion no coincide con el tipo de la variable en la posicion " + puntero
+                        + " de la linea " + linea + "\n";
+                break;
+            case 12:
+            message += "Las sentencias return no coinciden, línea " + linea + "\n";
+
             default:
                 break;
         }
@@ -193,14 +199,12 @@ public class GestorErrores {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
-        
+
     }
 
-
-    public void terminarGE() throws IOException{
-        if(!error){
-                bwErrores.write("\tSuccess!");
+    public void terminarGE() throws IOException {
+        if (!error) {
+            bwErrores.write("\tSuccess!");
         }
         bwErrores.close();
     }

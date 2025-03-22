@@ -1,1 +1,1 @@
-	Success!
+ERROR SINTÁCTICO: Caracter inesperado en la posicion 6 de la línea 5.

@@ -1,5 +1,7 @@
 package procesador;
 
+import java.io.IOException;
+
 public class Procesador {
 
     static AnalizadorSintactico aSin;
@@ -14,12 +16,14 @@ public class Procesador {
                 System.err.print("Número de argumentos erronio.\n");
         } else {
 
-            aSin = new AnalizadorSintactico(args[0]);
             try {
+                aSin = new AnalizadorSintactico(args[0]);
                 aSin.analisis();
                 System.out.println("\u001B[32mAnalisis completado con exito");
+            } catch (IOException e) {
+                System.err.println("Error de fichero");
             } catch (Exception e) {
-                System.err.println(e.getLocalizedMessage());
+                System.err.println(e.getMessage()); 
             }
         }
         // lexico no se imprima el id

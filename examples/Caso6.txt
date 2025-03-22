@@ -1,0 +1,9 @@
+function int suma (int a, int b) {
+    return a + b;
+}
+
+var int resultado;
+resultado = suma(5, 7);
+output resultado;
+if (resultado == 12) 
+    output 'Suma correcta';

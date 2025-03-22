@@ -23,6 +23,9 @@ public class AnalizadorSintactico {
 
     private Token sigToken;
 
+    private int puntero;
+    private int linea;
+
     private Predicate<Character> isFirst = x -> noTerminales.get(x).getFirst().contains(sigToken.getType());
     private Predicate<Character> isFollow = x -> noTerminales.get(x).getFollow().contains(sigToken.getType());
 
@@ -33,17 +36,13 @@ public class AnalizadorSintactico {
     private Tipo vacio = new Tipo("vacio"), funcion = new Tipo("funcion");
     private Tipo tipoOk = new Tipo("tipoOk"), tipoError = new Tipo("tipoError");
 
-    AnalizadorSintactico(String fichToRead) {
+    AnalizadorSintactico(String fichToRead) throws IOException {
 
         // Se inizializa el Analizador Léxico y gestor de errores
         aLex = new AnalizadorLexico(fichToRead);
         GE = aLex.getGE();
 
-        try {
-            bwParse = writeFich("parse.txt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        bwParse = writeFich("parse.txt"); // Se crea el fichero donde se escribira el parse del árbol
 
         // Se inicializan los conjuntos first y follow de los caracteres no terminales
 
@@ -210,8 +209,8 @@ public class AnalizadorSintactico {
 
     }
 
-    String analisis() {
-        this.sigToken = aLex.getTokens();
+    String analisis() throws IOException {
+        this.sigToken = aLex.getTokenFich();
         p1();
 
         // Escribir el resultado del parse en un archivo
@@ -246,10 +245,9 @@ public class AnalizadorSintactico {
     }
 
     // Axioma
-    private void p1() {
+    private void p1() throws IOException {
 
         this.ts = aLex.getTs();
-        ts.setDeslp(0);
         aLex.setZonaDeclarativa(false);
 
         p();
@@ -257,7 +255,7 @@ public class AnalizadorSintactico {
         ts.destroyTs();
     }
 
-    private void p() {
+    private void p() throws IOException {
         if (isFirst.test('B')) {
             parse += " 1";
             Tipo tipoR;
@@ -266,7 +264,7 @@ public class AnalizadorSintactico {
             p();
 
             if (tipoR != null) {
-                GE.selgErrorAnalizador("Sm-10", aLex.getPuntero(), aLex.getLinea(), sigToken);
+                GE.selgErrorAnalizador("Sm-10", puntero, linea);
             }
         }
 
@@ -281,7 +279,7 @@ public class AnalizadorSintactico {
             return;
 
         } else {
-            GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
+            GE.selgErrorAnalizador("Sx-0", puntero, linea);
         }
     }
 
@@ -304,12 +302,12 @@ public class AnalizadorSintactico {
 
             } else {
                 if (!(tipo1.equals(tipoError) || tipo2.equals(tipoError))) {
-                    GE.selgErrorAnalizador("Sm-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
+                    GE.selgErrorAnalizador("Sm-1", puntero, linea);
                 }
                 return tipoError;
             }
         } else {
-            GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken); // Error sintáctico
+            GE.selgErrorAnalizador("Sx-0", puntero, linea); // Error sintáctico
             return null;
         }
     }
@@ -321,7 +319,7 @@ public class AnalizadorSintactico {
             Tipo tipo1;
             Tipo tipo2;
 
-            equiparar(TokenType.opOr);
+            equiparar(TokenType.opOr, "||");
             tipo1 = r();
             tipo2 = e1();
 
@@ -338,7 +336,7 @@ public class AnalizadorSintactico {
 
             } else {
                 if (!(tipo1.equals(tipoError) || tipo2.equals(tipoError))) {
-                    GE.selgErrorAnalizador("Sm-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
+                    GE.selgErrorAnalizador("Sm-1", puntero, linea);
                 }
                 return tipoError;
             }
@@ -346,7 +344,7 @@ public class AnalizadorSintactico {
             parse += " 6";
             return vacio;
         } else {
-            GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
+            GE.selgErrorAnalizador("Sx-0", puntero, linea);
             return null;
         }
     }
@@ -369,12 +367,12 @@ public class AnalizadorSintactico {
 
             } else {
                 if (!(tipo1.equals(tipoError) || tipo2.equals(tipoError))) {
-                    GE.selgErrorAnalizador("Sm-2", aLex.getPuntero(), aLex.getLinea(), sigToken);
+                    GE.selgErrorAnalizador("Sm-2", puntero, linea);
                 }
                 return tipoError;
             }
         } else {
-            GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken); // Error sintáctico
+            GE.selgErrorAnalizador("Sx-0", puntero, linea); // Error sintáctico
             return null;
         }
     }
@@ -386,7 +384,7 @@ public class AnalizadorSintactico {
             Tipo tipo1;
             Tipo tipo2;
 
-            equiparar(TokenType.opIgual);
+            equiparar(TokenType.opIgual, "=");
             tipo1 = u();
             tipo2 = r1();
 
@@ -403,7 +401,7 @@ public class AnalizadorSintactico {
 
             } else {
                 if (!(tipo1.equals(tipoError) || tipo2.equals(tipoError))) {
-                    GE.selgErrorAnalizador("Sm-2", aLex.getPuntero(), aLex.getLinea(), sigToken);
+                    GE.selgErrorAnalizador("Sm-2", puntero, linea);
                 }
                 return tipoError;
             }
@@ -412,7 +410,7 @@ public class AnalizadorSintactico {
             return vacio;
 
         } else {
-            GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
+            GE.selgErrorAnalizador("Sx-0", puntero, linea);
             return null;
         }
     }
@@ -435,12 +433,12 @@ public class AnalizadorSintactico {
 
             } else {
                 if (!(tipo1.equals(tipoError) || tipo2.equals(tipoError))) {
-                    GE.selgErrorAnalizador("Sm-3", aLex.getPuntero(), aLex.getLinea(), sigToken);
+                    GE.selgErrorAnalizador("Sm-3", puntero, linea);
                 }
                 return tipoError;
             }
         } else {
-            GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
+            GE.selgErrorAnalizador("Sx-0", puntero, linea);
             return null;
         }
     }
@@ -452,7 +450,7 @@ public class AnalizadorSintactico {
             Tipo tipo1;
             Tipo tipo2;
 
-            equiparar(TokenType.opSuma);
+            equiparar(TokenType.opSuma, "+");
             tipo1 = v();
             tipo2 = u1();
 
@@ -461,6 +459,7 @@ public class AnalizadorSintactico {
                     return tipo1;
 
                 } else {
+                    GE.selgErrorAnalizador("Sm-3", puntero, linea);
                     return tipoError;
                 }
 
@@ -469,7 +468,7 @@ public class AnalizadorSintactico {
 
             } else {
                 if (!(tipo1.equals(tipoError) || tipo2.equals(tipoError))) {
-                    GE.selgErrorAnalizador("Sm-3", aLex.getPuntero(), aLex.getLinea(), sigToken);
+                    GE.selgErrorAnalizador("Sm-3", puntero, linea);
                 }
                 return tipoError;
             }
@@ -477,7 +476,7 @@ public class AnalizadorSintactico {
             parse += " 12";
             return vacio;
         } else {
-            GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
+            GE.selgErrorAnalizador("Sx-0", puntero, linea);
             return null;
         }
     }
@@ -488,23 +487,23 @@ public class AnalizadorSintactico {
 
             Tipo tipo;
 
-            equiparar(TokenType.paren, 1);
+            equiparar(TokenType.paren, 1, "(");
             tipo = e();
-            equiparar(TokenType.paren, 2);
+            equiparar(TokenType.paren, 2, ")");
 
             return tipo;
 
         } else if (sigToken.getType().equals(TokenType.entero)) {
             parse += " 14";
 
-            equiparar(TokenType.entero);
+            equiparar(TokenType.entero, "valor");
 
             return entero;
 
         } else if (sigToken.getType().equals(TokenType.cadena)) {
             parse += " 15";
 
-            equiparar(TokenType.cadena);
+            equiparar(TokenType.cadena,"cadena");
 
             return cadena;
 
@@ -514,7 +513,7 @@ public class AnalizadorSintactico {
             Tipo tipo;
             int pos = (int) sigToken.getAtribute();
 
-            equiparar(TokenType.id);
+            equiparar(TokenType.id, "identificador");
             tipo = v1();
 
             if (tipo.equals(vacio)) {
@@ -524,12 +523,12 @@ public class AnalizadorSintactico {
                 return ts.buscarTipoRet(pos);
 
             } else {
-                GE.selgErrorAnalizador("Sm-4", aLex.getPuntero(), aLex.getLinea(), sigToken);
+                GE.selgErrorAnalizador("Sm-4", puntero, linea);
                 return new Tipo("tipoError");
             }
 
         } else {
-            GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
+            GE.selgErrorAnalizador("Sx-0", puntero, linea);
             return null;
         }
     }
@@ -540,9 +539,9 @@ public class AnalizadorSintactico {
 
             Tipo tipo;
 
-            equiparar(TokenType.paren, 1);
+            equiparar(TokenType.paren, 1, "(");
             tipo = l();
-            equiparar(TokenType.paren, 2);
+            equiparar(TokenType.paren, 2, ")");
 
             return tipo;
 
@@ -551,7 +550,7 @@ public class AnalizadorSintactico {
             return vacio;
 
         } else {
-            GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
+            GE.selgErrorAnalizador("Sx-0", puntero, linea);
             return null;
         }
     }
@@ -561,45 +560,54 @@ public class AnalizadorSintactico {
         if (sigToken.getType().equals(TokenType.PRinput)) {
             parse += " 19";
 
-            equiparar(TokenType.PRinput);
+            Tipo tipoS;
+
+            equiparar(TokenType.PRinput, "input");
 
             int pos = (int) sigToken.getAtribute();
 
-            equiparar(TokenType.id);
-            equiparar(TokenType.puntoComa);
+            equiparar(TokenType.id, "identificador");
 
             if (ts.buscarTipoTS(pos).equals(entero) || ts.buscarTipoTS(pos).equals(entero)) {
-                return new Tipo[] { tipoOk, null };
+                tipoS = tipoOk;
+                
             } else {
-                GE.selgErrorAnalizador("Sm-5", aLex.getPuntero(), aLex.getLinea(), sigToken);
-                return new Tipo[] { tipoError, null };
+                GE.selgErrorAnalizador("Sm-5", puntero, linea);
+                tipoS = tipoError;
             }
+            
+            equiparar(TokenType.puntoComa, ";");
+
+            return new Tipo[] { tipoS, null };
 
         } else if (sigToken.getType().equals(TokenType.PRoutput)) {
             parse += " 20";
 
-            Tipo tipo;
+            Tipo tipo, tipoS;
 
-            equiparar(TokenType.PRoutput);
+            equiparar(TokenType.PRoutput, "output");
             tipo = e();
-            equiparar(TokenType.puntoComa);
 
             if (tipo.equals(entero) || tipo.equals(cadena)) {
-                return new Tipo[] { tipoOk, null };
+                tipoS = tipoOk;
 
             } else {
-                GE.selgErrorAnalizador("Sm-5", aLex.getPuntero(), aLex.getLinea(), sigToken);
-                return new Tipo[] { tipoError, null };
+                GE.selgErrorAnalizador("Sm-5", puntero, linea);
+                tipoS = tipoError;
             }
+
+            equiparar(TokenType.puntoComa, ";");
+
+            return new Tipo[] { tipoS, null };
 
         } else if (sigToken.getType().equals(TokenType.PRreturn)) {
             parse += " 21";
 
             Tipo tipo;
 
-            equiparar(TokenType.PRreturn);
+            equiparar(TokenType.PRreturn, "return");
             tipo = x();
-            equiparar(TokenType.puntoComa);
+            equiparar(TokenType.puntoComa, ";");
 
             if (!tipo.equals(tipoError)) {
                 return new Tipo[] { tipoOk, tipo };
@@ -614,7 +622,7 @@ public class AnalizadorSintactico {
             Tipo tipo;
             int pos = (int) sigToken.getAtribute();
 
-            equiparar(TokenType.id);
+            equiparar(TokenType.id, "identificador");
             tipo = s1();
 
             if (ts.buscarTipoTS(pos).equals(funcion)) { // id.tipo == funcion
@@ -622,19 +630,19 @@ public class AnalizadorSintactico {
                     return new Tipo[] { tipoOk, null };
 
                 } else {
-                    GE.selgErrorAnalizador("Sm-4", aLex.getPuntero(), aLex.getLinea(), sigToken);
+                    GE.selgErrorAnalizador("Sm-4", puntero, linea);
                     return new Tipo[] { tipoError, vacio };
                 }
             } else if (ts.buscarTipoTS(pos).equals(tipo)) {
                 return new Tipo[] { tipoOk, null };
 
             } else {
-                GE.selgErrorAnalizador("Sm-5", aLex.getPuntero(), aLex.getLinea(), sigToken);
+                GE.selgErrorAnalizador("Sm-11", puntero, linea);
                 return new Tipo[] { tipoError, null };
             }
 
         } else {
-            GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
+            GE.selgErrorAnalizador("Sx-0", puntero, linea);
             return null;
         }
     }
@@ -645,9 +653,9 @@ public class AnalizadorSintactico {
 
             Tipo tipo;
 
-            equiparar(TokenType.opAsig);
+            equiparar(TokenType.opAsig, "=");
             tipo = e();
-            equiparar(TokenType.puntoComa);
+            equiparar(TokenType.puntoComa, ";");
 
             return tipo;
 
@@ -656,10 +664,10 @@ public class AnalizadorSintactico {
 
             Tipo tipo;
 
-            equiparar(TokenType.paren, 1);
+            equiparar(TokenType.paren, 1, "(");
             tipo = l();
-            equiparar(TokenType.paren);
-            equiparar(TokenType.puntoComa);
+            equiparar(TokenType.paren, 2, ")");
+            equiparar(TokenType.puntoComa, ";");
 
             return tipo;
 
@@ -668,14 +676,14 @@ public class AnalizadorSintactico {
 
             Tipo tipo;
 
-            equiparar(TokenType.opAsigDiv);
+            equiparar(TokenType.opAsigDiv, "/=");
             tipo = e();
-            equiparar(TokenType.puntoComa);
+            equiparar(TokenType.puntoComa, ";");
 
             return tipo;
 
         } else {
-            GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
+            GE.selgErrorAnalizador("Sx-0", puntero, linea);
             return null;
         }
     }
@@ -703,7 +711,7 @@ public class AnalizadorSintactico {
             parse += " 27";
             return vacio;
         } else {
-            GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
+            GE.selgErrorAnalizador("Sx-0", puntero, linea);
             return null;
         }
     }
@@ -715,7 +723,7 @@ public class AnalizadorSintactico {
             Tipo tipo1;
             Tipo tipo2;
 
-            equiparar(TokenType.coma);
+            equiparar(TokenType.coma, ",");
             tipo1 = e();
             tipo2 = q();
 
@@ -733,7 +741,7 @@ public class AnalizadorSintactico {
             return vacio;
 
         } else {
-            GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
+            GE.selgErrorAnalizador("Sx-0", puntero, linea);
             return null;
         }
     }
@@ -753,7 +761,7 @@ public class AnalizadorSintactico {
             return vacio;
 
         } else {
-            GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
+            GE.selgErrorAnalizador("Sx-0", puntero, linea);
             return null;
         }
     }
@@ -766,15 +774,17 @@ public class AnalizadorSintactico {
             Tipo tipo;
             Tipo[] tipo2;
 
-            equiparar(TokenType.PRif);
-            equiparar(TokenType.paren, 1);
+            equiparar(TokenType.PRif, "if");
+            equiparar(TokenType.paren, 1, "(");
             tipo = e();
-            equiparar(TokenType.paren, 2);
-            tipo2 = s();
 
             if (!tipo.equals(bool)) {
-                GE.selgErrorAnalizador("Sm-6", aLex.getPuntero(), aLex.getLinea(), sigToken);
+                GE.selgErrorAnalizador("Sm-6", puntero, linea);
             }
+
+            equiparar(TokenType.paren, 2, ")");
+            tipo2 = s();
+
             return tipo2[1];
 
         } else if (sigToken.getType().equals(TokenType.PRvar)) {
@@ -782,20 +792,20 @@ public class AnalizadorSintactico {
 
             Tipo tipo;
 
-            equiparar(TokenType.PRvar);
+            equiparar(TokenType.PRvar, "var");
 
             tipo = t();
             aLex.setZonaDeclarativa(false);
 
             int pos = (int) sigToken.getAtribute();
 
-            equiparar(TokenType.id);
+            equiparar(TokenType.id, "identificador");
 
             ts.insertarTipoTS(pos, tipo);
             ts.insertarDespl(pos);
             ts.setDeslp(tipo.getAncho());
 
-            equiparar(TokenType.puntoComa);
+            equiparar(TokenType.puntoComa, ";");
 
             return null;
         }
@@ -806,17 +816,19 @@ public class AnalizadorSintactico {
             Tipo tipo1;
             Tipo tipo2;
 
-            equiparar(TokenType.PRwhile);
-            equiparar(TokenType.paren, 1);
+            equiparar(TokenType.PRwhile, "while");
+            equiparar(TokenType.paren, 1, "(");
             tipo1 = e();
-            equiparar(TokenType.paren, 2);
-            equiparar(TokenType.llave, 1);
-            tipo2 = c();
-            equiparar(TokenType.llave, 2);
 
             if (!tipo1.equals(bool)) {
-                GE.selgErrorAnalizador("Sm-7", aLex.getPuntero(), aLex.getLinea(), sigToken);
+                GE.selgErrorAnalizador("Sm-7", puntero, linea);
             }
+
+            equiparar(TokenType.paren, 2, ")");
+            equiparar(TokenType.llave, 1, "{");
+            tipo2 = c();
+            equiparar(TokenType.llave, 2, "}");
+
             return tipo2;
 
         } else if (isFirst.test('S')) {
@@ -828,7 +840,7 @@ public class AnalizadorSintactico {
             return tipo[1];
 
         } else {
-            GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
+            GE.selgErrorAnalizador("Sx-0", puntero, linea);
             return null;
         }
     }
@@ -839,32 +851,32 @@ public class AnalizadorSintactico {
         if (sigToken.getType().equals(TokenType.PRint)) {
             parse += " 36";
 
-            equiparar(TokenType.PRint);
+            equiparar(TokenType.PRint, "int");
 
             return entero;
 
         } else if (sigToken.getType().equals(TokenType.PRboolean)) {
             parse += " 37";
 
-            equiparar(TokenType.PRboolean);
+            equiparar(TokenType.PRboolean, "boolean");
 
             return bool;
 
         } else if (sigToken.getType().equals(TokenType.PRstring)) {
             parse += " 38";
 
-            equiparar(TokenType.PRstring);
+            equiparar(TokenType.PRstring, "string");
 
             return cadena;
 
         } else {
-            GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
+            GE.selgErrorAnalizador("Sx-0", puntero, linea);
             return null;
         }
     }
 
     // Declaracion de funciones
-    private void f() {
+    private void f() throws IOException {
         if (sigToken.getType().equals(TokenType.PRfun)) {
             parse += " 39";
 
@@ -872,18 +884,18 @@ public class AnalizadorSintactico {
             Tipo tipo2;
             Tipo tipo3;
 
-            equiparar(TokenType.PRfun);
+            equiparar(TokenType.PRfun, "funcion");
             tipo1 = h();
             aLex.setZonaDeclarativa(false);
 
             int pos = (int) sigToken.getAtribute();
 
-            equiparar(TokenType.id);
+            equiparar(TokenType.id, "identificador");
 
             ts = ts.creatTSChild();
             aLex.setTs(ts);
 
-            equiparar(TokenType.paren, 1);
+            equiparar(TokenType.paren, 1, "(");
             tipo2 = a();
 
             aLex.setZonaDeclarativa(false);
@@ -893,24 +905,27 @@ public class AnalizadorSintactico {
             ts.insertarTipoRetTS(pos, tipo1);
             ts.insertarEtiqTS(pos, ts.nuevaEtiq(pos));
 
-            equiparar(TokenType.paren, 2);
+            equiparar(TokenType.paren, 2, ")");
 
-            equiparar(TokenType.llave, 1);
+            equiparar(TokenType.llave, 1, "{");
             tipo3 = c();
-            equiparar(TokenType.llave, 2);
 
             if (!tipo1.equals(tipo3) && !(tipo1.equals(vacio) && tipo3 == null)) {
                 if (tipo1.equals(vacio)) {
-                    GE.selgErrorAnalizador("Sm-8", aLex.getPuntero(), aLex.getLinea(), sigToken);
+                    GE.selgErrorAnalizador("Sm-8", puntero, linea);
 
                 } else {
-                    GE.selgErrorAnalizador("Sm-9", aLex.getPuntero(), aLex.getLinea(), sigToken);
+                    GE.selgErrorAnalizador("Sm-9", puntero, linea);
                 }
             }
+
+            equiparar(TokenType.llave, 2, "}");
+
             ts = ts.destroyTs();
+
             aLex.setTs(ts);
         } else {
-            GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
+            GE.selgErrorAnalizador("Sx-0", puntero, linea);
         }
     }
 
@@ -928,12 +943,12 @@ public class AnalizadorSintactico {
             parse += " 41";
             aLex.setZonaDeclarativa(true);
 
-            equiparar(TokenType.PRvoid);
+            equiparar(TokenType.PRvoid, "void");
 
             return vacio;
 
         } else {
-            GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
+            GE.selgErrorAnalizador("Sx-0", puntero, linea);
             return null;
         }
     }
@@ -949,7 +964,7 @@ public class AnalizadorSintactico {
             aLex.setZonaDeclarativa(false);
             int pos = (int) sigToken.getAtribute();
 
-            equiparar(TokenType.id);
+            equiparar(TokenType.id, "identificador");
 
             ts.insertarTipoTS(pos, tipoT);
             ts.insertarDespl(pos);
@@ -969,12 +984,12 @@ public class AnalizadorSintactico {
         } else if (sigToken.getType().equals(TokenType.PRvoid)) {
             parse += " 43";
 
-            equiparar(TokenType.PRvoid);
+            equiparar(TokenType.PRvoid, "void");
 
             return vacio;
 
         } else {
-            GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
+            GE.selgErrorAnalizador("Sx-0", puntero, linea);
             return null;
         }
     }
@@ -985,13 +1000,13 @@ public class AnalizadorSintactico {
 
             Tipo tipoT, tipoK;
 
-            equiparar(TokenType.coma);
+            equiparar(TokenType.coma,",");
             tipoT = t();
 
             aLex.setZonaDeclarativa(false);
             int pos = (int) sigToken.getAtribute();
 
-            equiparar(TokenType.id);
+            equiparar(TokenType.id, "identificador");
 
             ts.insertarTipoTS(pos, tipoT);
             ts.insertarDespl(pos);
@@ -1012,7 +1027,7 @@ public class AnalizadorSintactico {
             parse += " 45";
             return vacio;
         } else {
-            GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
+            GE.selgErrorAnalizador("Sx-0", puntero, linea);
             return null;
         }
     }
@@ -1026,16 +1041,17 @@ public class AnalizadorSintactico {
             tipoB = b();
             tipoC = c();
 
-            if (tipoB == null || tipoB.equals(vacio)) {
+            if (tipoB == null) {
                 return tipoC;
 
-            } else if (tipoC == null || tipoC.equals(vacio)) {
+            } else if (tipoC == null) {
                 return tipoB;
 
             } else if (tipoB.equals(tipoC)) {
                 return tipoB;
 
             } else {
+                GE.selgErrorAnalizador("Sm-12", puntero, linea);
                 return tipoError;
             }
 
@@ -1045,23 +1061,35 @@ public class AnalizadorSintactico {
             return null;
 
         } else {
-            GE.selgErrorAnalizador("Sx-1", aLex.getPuntero(), aLex.getLinea(), sigToken);
+            GE.selgErrorAnalizador("Sx-0", puntero, linea);
             return null;
         }
     }
 
-    private void equiparar(TokenType tipo) {
+    private void equiparar(TokenType tipo, String esperado) {
         if (tipo.equals(sigToken.getType())) {
-            this.sigToken = aLex.getTokens();
+            try {
+                this.puntero = aLex.getPuntero();
+                this.linea = aLex.getLinea();
+                this.sigToken = aLex.getTokenFich();
+            } catch (Exception e) {
+                throw new RuntimeException("Error al leer token del fichero");
+            }
         } else
-            GE.selgErrorAnalizador("Sx-" + tipo.toString(), aLex.getPuntero(), aLex.getLinea());
+            GE.selgErrorAnalizador("Sx-" + esperado, puntero, linea);
     }
 
-    private void equiparar(TokenType tipo, int atributo) {
+    private void equiparar(TokenType tipo, int atributo, String esperado) {
         if (tipo.equals(sigToken.getType()) && (int) sigToken.getAtribute() == atributo) {
-            this.sigToken = aLex.getTokens();
+            try {
+                this.puntero = aLex.getPuntero();
+                this.linea = aLex.getLinea();
+                this.sigToken = aLex.getTokenFich();
+            } catch (Exception e) {
+                throw new RuntimeException("Error al leer token del fichero");
+            }
         } else
-            GE.selgErrorAnalizador("Sx-" + tipo.toString() + "_" + atributo, aLex.getPuntero(), aLex.getLinea());
+            GE.selgErrorAnalizador("Sx-" + esperado ,puntero, linea);
     }
 
 }
