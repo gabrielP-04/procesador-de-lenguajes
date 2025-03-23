@@ -1072,7 +1072,7 @@ public class AnalizadorSintactico {
                 this.puntero = aLex.getPuntero();
                 this.linea = aLex.getLinea();
                 this.sigToken = aLex.getTokenFich();
-            } catch (Exception e) {
+            } catch (IOException e) {
                 throw new RuntimeException("Error al leer token del fichero");
             }
         } else

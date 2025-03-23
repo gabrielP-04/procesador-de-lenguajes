@@ -1,1 +1,1 @@
-ERROR SINTÁCTICO: Caracter inesperado en la posicion 6 de la línea 5.
+ERROR LÉLXICO:(52): variable ya declarada previamente en la posicion 17 de la linea 4

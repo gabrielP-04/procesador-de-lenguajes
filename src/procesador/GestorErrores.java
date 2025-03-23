@@ -30,8 +30,12 @@ public class GestorErrores {
         switch (analizador(partes[0])) {
             case 1:
                 gErrorALex(partes[1]);
-
-                break;
+                try {
+                    terminarGE();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                throw new RuntimeException("Error léxico");
             case 2:
                 gErrorSin(partes[1]);
                 try {

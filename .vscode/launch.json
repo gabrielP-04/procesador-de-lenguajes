@@ -16,7 +16,7 @@
             "request": "launch",
             "mainClass": "procesador.Procesador",
             "projectName": "Procesador_a49c18fe",
-            "args": ["examples/Caso7.txt"]
+            "args": ["examples/Caso9.txt"]
 
         }
     ]
