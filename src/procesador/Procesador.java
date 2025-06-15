@@ -11,17 +11,23 @@ public class Procesador {
         //Verificacón de argumentos
         if (args.length != 1) {
             if (args.length == 0)
-                System.err.print("Es necesario añadir un archivo.\n");
+                System.err.print("\u001B[31mEs necesario añadir un archivo.\n");
             else
-                System.err.print("Número de argumentos erroneo.\n");
+                System.err.print("\u001B[31mNúmero de argumentos erroneo.\n");
         } else {
 
+            boolean error = false;
             try {
                 aSin = new AnalizadorSintactico(args[0]);
-                aSin.analisis();
-                System.out.println("\u001B[32mAnalisis completado con exito");
+                error = aSin.analisis();
+                if (!error) {
+                    System.out.println("\u001B[32mAnalisis completado con exito");
+                } else {
+                    System.out.println("\u001B[31mSe han encontrado errores durante el análisis. \u001B[0mVerificar el fichero data/errores.txt para más detalles.");
+                }
+                
             } catch (IOException e) {
-                System.err.println("Error de fichero");
+                System.err.println("\u001B[31mError de fichero");
             } catch (Exception e) {
                 System.err.println(e.getMessage()); 
             }

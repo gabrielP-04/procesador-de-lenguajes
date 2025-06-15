@@ -136,8 +136,8 @@ public class TS {
     private RandomAccessFile writeFichPadre(String nameFich) {
         RandomAccessFile file = null;
         try {
-            file = new RandomAccessFile(cwd + "/data/aLex/" + nameFich, "rw");
-            FileWriter fw = new FileWriter(cwd + "/data/aLex/" + nameFich, false);
+            file = new RandomAccessFile(cwd + "/data/" + nameFich, "rw");
+            FileWriter fw = new FileWriter(cwd + "/data/" + nameFich, false);
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -148,7 +148,7 @@ public class TS {
     private BufferedWriter writeFich(String nameFich) {
         FileWriter fw = null;
         try {
-            fw = new FileWriter(cwd + "/data/aLex/" + nameFich, false);
+            fw = new FileWriter(cwd + "/data/" + nameFich, false);
         } catch (IOException e) {
             e.printStackTrace();
         } // crea FileWriter para crear el archivo de salida

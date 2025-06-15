@@ -209,9 +209,11 @@ public class AnalizadorSintactico {
 
     }
 
-    String analisis() throws IOException {
+    boolean analisis() throws IOException {
         this.sigToken = aLex.getTokenFich();
         p1();
+
+        boolean error = GE.getError();
 
         // Escribir el resultado del parse en un archivo
         try {
@@ -223,7 +225,7 @@ public class AnalizadorSintactico {
             e.printStackTrace();
         }
 
-        return parse;
+        return error;
     }
 
     /**
@@ -689,7 +691,7 @@ public class AnalizadorSintactico {
     }
 
     private Tipo l() {
-        if (isFirst.test('E')) {
+        if (isFirst.test('E') && !(sigToken.getType().equals(TokenType.paren) && (int) sigToken.getAtribute() == 2)) {
             parse += " 26";
 
             Tipo tipo1;
@@ -910,7 +912,7 @@ public class AnalizadorSintactico {
             equiparar(TokenType.llave, 1, "{");
             tipo3 = c();
 
-            if (!tipo1.equals(tipo3) && !(tipo1.equals(vacio) && tipo3 == null)) {
+            if (tipo3 != null && !tipo1.equals(tipo3)) {
                 if (tipo1.equals(vacio)) {
                     GE.selgErrorAnalizador("Sm-8", puntero, linea);
 

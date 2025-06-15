@@ -18,6 +18,10 @@ public class GestorErrores {
         bwErrores = writeFich("errores.txt");
     }
 
+    boolean getError () {
+        return error;
+    }
+
     public void selgErrorAnalizador(String codigo, int puntero, int linea) {
         this.puntero = puntero + 1;
         this.linea = linea;
@@ -35,7 +39,7 @@ public class GestorErrores {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                throw new RuntimeException("Error léxico");
+                throw new RuntimeException("\u001B[31mError léxico. \u001B[0mVerificar el fichero data/errores.txt para más detalles.");
             case 2:
                 gErrorSin(partes[1]);
                 try {
@@ -43,13 +47,13 @@ public class GestorErrores {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                throw new RuntimeException("Error sinctáctico");
+                throw new RuntimeException("\u001B[31mError sinctáctico. \u001B[0mVerificar el fichero data/errores.txt para más detalles.");
             case 3:
                 gErrorASem(partes[1]);
                 break;
             default:
 
-                throw new IllegalArgumentException("Codigo error invalido");
+                throw new IllegalArgumentException("Código error inválido");
         }
     }
 
@@ -78,7 +82,7 @@ public class GestorErrores {
     private BufferedWriter writeFich(String nameFich) {
         FileWriter fw = null;
         try {
-            fw = new FileWriter(cwd + "/data/aLex/" + nameFich);
+            fw = new FileWriter(cwd + "/data/" + nameFich);
         } catch (IOException e) {
             e.printStackTrace();
         } // crea FileWriter para crear el archivo de salida
@@ -94,18 +98,18 @@ public class GestorErrores {
         switch (code) {
 
             case 50:
-                message += "entero demasiado largo en la posición " + puntero + " de la linea " + linea + "\n";
+                message += "entero demasiado largo en la posición " + puntero + " de la línea " + linea + ".\n";
                 break;
             case 51:
-                message += "cadena demasiado larga en la posición " + puntero + " de la linea " + linea + "\n";
+                message += "cadena demasiado larga en la posición " + puntero + " de la línea " + linea + ".\n";
                 break;
             case 52:
-                message += "variable ya declarada previamente en la posicion " + puntero + " de la linea " + linea
-                        + "\n";
+                message += "variable ya declarada previamente en la posición " + puntero + " de la línea " + linea
+                        + ".\n";
                 break;
             default:
-                message += "caracter no reconocido en la posición " + puntero + " de la linea " + linea + "\n";
-                throw new RuntimeException("Error Léxico");
+                message += "caracter no reconocido en la posición " + puntero + " de la línea " + linea + ".\n";
+                break;
 
         }
 
@@ -122,7 +126,7 @@ public class GestorErrores {
         String message = "ERROR SINTÁCTICO: ";
 
         if (codigo.equals("0")) {
-            message += "Caracter inesperado en la posicion " + puntero + " de la línea " + linea + ".\n";
+            message += "Caracter inesperado en la posición " + puntero + " de la línea " + linea + ".\n";
         } else {
             message += codigo + " esperado en la posición " + puntero + " de la línea " + linea + ".\n";
         }
@@ -143,56 +147,56 @@ public class GestorErrores {
         switch (code) {
 
             case 1:
-                message += "Operación || solo definido para tipos lógicos en la posición " + puntero + " de la linea "
-                        + linea + "\n";
+                message += "Operación || solo definido para tipos lógicos en la posición " + puntero + " de la línea "
+                        + linea + ".\n";
                 break;
             case 2:
-                message += "Operación == solo definido para tipos enteros en la posición " + puntero + " de la linea "
-                        + linea + "\n";
+                message += "Operación == solo definido para tipos enteros en la posición " + puntero + " de la línea "
+                        + linea + ".\n";
                 break;
             case 3:
-                message += "Operación + solo definida para tipos enteros en la posicion " + puntero + " de la linea "
-                        + linea + "\n";
+                message += "Operación + solo definida para tipos enteros en la posición " + puntero + " de la línea "
+                        + linea + ".\n";
                 break;
 
             case 4:
-                message += "Los parámetros no coinciden con la llamada de la función en la posicion " + puntero
-                        + " de la linea " + linea + "\n";
+                message += "Los parámetros no coinciden con la llamada de la función en la posición " + puntero
+                        + " de la línea " + linea + ".\n";
                 break;
             case 5:
-                message += "Las sentencias input y output solo pueden operar con una variable tipo entero o cadena en la posicion "
-                        + puntero + " de la linea " + linea + "\n";
+                message += "Las sentencias input y output solo pueden operar con una variable tipo entero o cadena en la posición "
+                        + puntero + " de la línea " + linea + ".\n";
                 break;
 
             case 6:
-                message += "Se esperaba un tipo boolean en la posicion " + puntero + " de la linea " + linea + "\n";
+                message += "Se esperaba un tipo boolean en la posición " + puntero + " de la línea " + linea + ".\n";
                 break;
 
             case 7:
-                message += "La sentencia while debe tener una condicion de tipo lógico en la posicion " + puntero
-                        + " de la linea " + linea + "\n";
+                message += "La sentencia while debe tener una condicion de tipo lógico en la posición " + puntero
+                        + " de la línea " + linea + ".\n";
                 break;
 
             case 8:
-                message += "La funcion no devuelve nada en la posicion " + puntero + " de la linea " + linea + "\n";
+                message += "La funcion no devuelve nada en la posición " + puntero + " de la línea " + linea + ".\n";
                 break;
 
             case 9:
-                message += "El tipo que devuelve la funcion no es correcto en la posicion " + puntero + " de la linea "
-                        + linea + "\n";
+                message += "El tipo que devuelve la función no es correcto en la posición " + puntero + " de la línea "
+                        + linea + ".\n";
                 break;
 
             case 10:
-                message += "La sentencia return está mal ubicado en la posicion " + puntero + " de la linea " + linea
-                        + "\n";
+                message += "La sentencia return está mal ubicado en la posición " + puntero + " de la línea " + linea
+                        + ".\n";
                 break;
 
             case 11:
-                message += "La asignacion no coincide con el tipo de la variable en la posicion " + puntero
-                        + " de la linea " + linea + "\n";
+                message += "La asignación no coincide con el tipo de la variable en la posición " + puntero
+                        + " de la línea " + linea + ".\n";
                 break;
             case 12:
-                message += "La sentencia return no devuelve el tipo correspondiente en la línea " + linea + "\n";
+                message += "La sentencia return no devuelve el tipo correspondiente en la línea " + linea + ".\n";
 
             default:
                 break;
@@ -208,7 +212,7 @@ public class GestorErrores {
 
     public void terminarGE() throws IOException {
         if (!error) {
-            bwErrores.write("\tSuccess!");
+            bwErrores.write("No se han econtrado errores en el análisis.");
         }
         bwErrores.close();
     }
