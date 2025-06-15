@@ -13,7 +13,7 @@ public class Procesador {
             if (args.length == 0)
                 System.err.print("Es necesario añadir un archivo.\n");
             else
-                System.err.print("Número de argumentos erronio.\n");
+                System.err.print("Número de argumentos erroneo.\n");
         } else {
 
             try {

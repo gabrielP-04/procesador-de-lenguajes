@@ -1,14 +1,22 @@
-var int count;
-count = 5;
+function boolean verificarAcceso(int nivel) {
+    var string mensaje;
+    var int clave;
+    var boolean result;
 
-var string count;
+    mensaje = 5;         
+    clave = '1234';       
 
-function int calcularDiv(int a, int b) {
-  var int total;
-  total = a;
-  total /= b;
-  return total;
+    if (nivel)             
+        output 'Acceso permitido';
+
+    return result;     
+}    
+
+function void iniciarSistema(void) {
+    var int nivel;
+    nivel = 3;
+
+    verificarAcceso(nivel);    
 }
 
-var int total;
-total = calculateDiv(3, 7);
+iniciarSistema();

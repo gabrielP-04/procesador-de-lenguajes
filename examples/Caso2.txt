@@ -1,9 +1,15 @@
-function void checkInput(boolean isValid, string message, int number) {
-  var string result;
-  while (number || isValid) {
-      result = 'Processing: ' + message;
-      output(result);
-    }
-    number = 10;
-  }
-  return; /* fin de la función */
+var int a;
+var int b;
+
+var boolean cond1;
+var boolean cond2;
+var boolean resultado;
+
+a = 5;
+b = 10;
+
+cond1 = (a == 5);
+cond2 = (b == 20);
+
+resultado = cond1 || cond2;
+

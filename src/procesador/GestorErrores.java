@@ -89,7 +89,7 @@ public class GestorErrores {
     private void gErrorALex(String num) {
         error = true;
         int code = Integer.parseInt(num);
-        String message = "ERROR LÉLXICO:(" + code + "): ";
+        String message = "ERROR LÉXICO (" + code + "): ";
 
         switch (code) {
 
@@ -138,7 +138,7 @@ public class GestorErrores {
     private void gErrorASem(String num) {
         error = true;
         int code = Integer.parseInt(num);
-        String message = "ERROR SEMÁNTICO:(" + code + "): ";
+        String message = "ERROR SEMÁNTICO (" + code + "): ";
 
         switch (code) {
 
@@ -151,7 +151,7 @@ public class GestorErrores {
                         + linea + "\n";
                 break;
             case 3:
-                message += "Operación + solo definido para tipos enteros en la posicion " + puntero + " de la linea "
+                message += "Operación + solo definida para tipos enteros en la posicion " + puntero + " de la linea "
                         + linea + "\n";
                 break;
 
@@ -160,7 +160,7 @@ public class GestorErrores {
                         + " de la linea " + linea + "\n";
                 break;
             case 5:
-                message += "La sentencias input y output solo puede estar operando con una variable tipo entero o cadena en la posicion "
+                message += "Las sentencias input y output solo pueden operar con una variable tipo entero o cadena en la posicion "
                         + puntero + " de la linea " + linea + "\n";
                 break;
 
@@ -192,7 +192,7 @@ public class GestorErrores {
                         + " de la linea " + linea + "\n";
                 break;
             case 12:
-            message += "Las sentencias return no coinciden, línea " + linea + "\n";
+                message += "La sentencia return no devuelve el tipo correspondiente en la línea " + linea + "\n";
 
             default:
                 break;

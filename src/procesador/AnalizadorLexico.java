@@ -184,7 +184,7 @@ public class AnalizadorLexico {
 
             if (string != null) {
                 c = string[puntero]; // Obtiene un caracter.
-                char accion = MT_AFD(c); //Verifica la matriz del autámata
+                char accion = MT_AFD(c); // Verifica la matriz del autómata
 
                 switch (accion) {
                     case 'A':
@@ -218,6 +218,7 @@ public class AnalizadorLexico {
                         break;
 
                     case 'F':
+                        lex += c;
                         puntero++;
 
                         if (cont > 64) {

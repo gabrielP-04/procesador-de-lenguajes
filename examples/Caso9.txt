@@ -1,14 +1,11 @@
-var int count;
-count = 5;
+function int procesarDatos(string mensaje, int cantidad) {
+    var boolean resultado;
+    var int total;
 
-var string count;
+    resultado = mensaje == 'hola'; 
+    total = resultado + cantidad; 
 
-function int calcularDiv(int a, int b) {
-  var int total;
-  total = a;
-  total /= b;
-  return total;
+    output resultado;             
+  
+    return mensaje;               
 }
-
-var int total;
-total = calculateDiv(3, 7);

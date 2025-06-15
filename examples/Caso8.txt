@@ -1,13 +1,14 @@
-var int contador;
-var string mensaje = 'Este es un mensaje extremadamente largo que supera los 64 caracteres permitidos para una cadena en este lenguaje JS--';
+var int count;
+count = 5;
 
-function boolean validaInput (int numero) {
-  if (numero == 0) 
-    output 'El número es cero';
+var string count;
 
-contador = contador + 1;
-
-while (contador != 0) {  
-  output contador;
-  output mensaje;
+function int calcularDiv(int a, int b) {
+  var int total;
+  total = a;
+  total /= b;
+  return total;
 }
+
+var int total;
+total = calculateDiv(3, 7);
