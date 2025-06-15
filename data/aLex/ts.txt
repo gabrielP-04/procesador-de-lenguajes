@@ -1,0 +1,7 @@
+CONTENIDO DE LA TABLA #1 :
+
+ * LEXEMA: 'nivel'
+   ATRIBUTOS :
+	+ tipo: 'entero'
+	+ despl: 0
+---------   ---------

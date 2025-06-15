@@ -2,7 +2,7 @@ Axioma = P
 
 NoTerminales = { P E E1 R R1 U U1 V V1 S S1 L Q X B T F H A K C }
 
-Terminales = { boolean function if input int output return string var void while entero cadena id /= = , ; ( ) { } + || == eof lambda }
+Terminales = { boolean function if input int output return string var void while entero cadena id /= = , ; ( ) { } + || == eof }
 
 Producciones = {
 
@@ -56,7 +56,7 @@ B -> var T id ;
 B -> while ( E ) { C }
 B -> S				
 
-T ->  int
+T -> int
 T -> boolean
 T -> string
 

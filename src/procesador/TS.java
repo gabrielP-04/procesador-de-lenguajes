@@ -287,7 +287,7 @@ public class TS {
                 if (s.getTipoParam().equals(new Tipo("producto"))) {
                     List<Tipo> listaParam = s.getTipoParam().getProducto();
                     int i = 1;
-                    token.append("\t+ numParam: '" + listaParam.size() + "\n");
+                    token.append("\t+ numParam: " + listaParam.size() + "\n");
                     for (Tipo tparam : listaParam) {
                         token.append("\t\t+ TipoParam" + i + ": '" + tparam + "'\n");
                         i++;
@@ -302,7 +302,7 @@ public class TS {
                 }
 
                 token.append("\t+ TipoRetorno: '" + s.getTipoRetorno() + "'\n");
-                token.append("\t+ EtiqFuncion: " + s.getEtiqFuncion() + "\n");
+                token.append("\t+ EtiqFuncion: '" + s.getEtiqFuncion() + "'\n");
             }
             else {
                 token.append("\t+ despl: " + s.getDeslp() + "\n");

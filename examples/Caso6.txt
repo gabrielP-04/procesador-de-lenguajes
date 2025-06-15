@@ -1,9 +1,3 @@
-function int suma (int a, int b) {
-    return a + b;
-}
+var string mensaje;
 
-var int resultado;
-resultado = suma(5, 7);
-output resultado;
-if (resultado == 12) 
-    output 'Suma correcta';
+mensaje = 'Este es un mensaje extremadamente largo que supera los 64 caracteres permitidos para una cadena en este lenguaje JS--';

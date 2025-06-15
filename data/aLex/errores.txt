@@ -1,1 +1,4 @@
-ERROR LÉLXICO:(52): variable ya declarada previamente en la posicion 17 de la linea 4
+ERROR SEMÁNTICO (11): La asignacion no coincide con el tipo de la variable en la posicion 17 de la linea 6
+ERROR SEMÁNTICO (11): La asignacion no coincide con el tipo de la variable en la posicion 20 de la linea 7
+ERROR SEMÁNTICO (6): Se esperaba un tipo boolean en la posicion 14 de la linea 9
+ERROR SINTÁCTICO: Caracter inesperado en la posicion 16 de la línea 22.

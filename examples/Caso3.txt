@@ -3,8 +3,9 @@ function void processValues(int val1, boolean flag) {
   while (flag) {
     var int processedValue;
     processedValue = val1 + 20;
-    output('Processed value: ' + processedValue);
+    output(processedValue);
     }
     val1 = 5; 
+    return;
  }
-  return;
+  
