@@ -1,0 +1,25 @@
+CONTENIDO DE LA TABLA #0 :
+
+ * LEXEMA: 'verificarAcceso'
+   ATRIBUTOS :
+	+ tipo: 'funcion'
+	+ numParam: 1
+		+ TipoParam1: entero
+	+ TipoRetorno: 'boolean'
+	+ EtiqFuncion: 'Et1_verificarAcceso'
+---------   ---------
+ * LEXEMA: 'iniciarSistema'
+   ATRIBUTOS :
+	+ tipo: 'funcion'
+	+ numParam: 0
+		+ TipoParam: vacío'
+	+ TipoRetorno: 'vacio'
+	+ EtiqFuncion: 'Et1_iniciarSistema'
+---------   ---------
+CONTENIDO DE LA TABLA #1 :
+
+ * LEXEMA: 'nivel'
+   ATRIBUTOS :
+	+ tipo: 'entero'
+	+ despl: 0
+---------   ---------

@@ -177,26 +177,21 @@ public class GestorErrores {
                         + " de la línea " + linea + ".\n";
                 break;
 
-            case 8:
-                message += "La funcion no devuelve nada en la posición " + puntero + " de la línea " + linea + ".\n";
-                break;
+             case 8:
+                message += "El tipo de las sentencia return no coinciden en la línea " + linea + ".\n";
 
             case 9:
-                message += "El tipo que devuelve la función no es correcto en la posición " + puntero + " de la línea "
-                        + linea + ".\n";
+                message += "El tipo que devuelve la función no es correcto en la línea " + linea + ".\n";
                 break;
 
             case 10:
-                message += "La sentencia return está mal ubicado en la posición " + puntero + " de la línea " + linea
-                        + ".\n";
+                message += "La sentencia return está mal ubicado en la línea " + linea + ".\n";
                 break;
 
             case 11:
                 message += "La asignación no coincide con el tipo de la variable en la posición " + puntero
                         + " de la línea " + linea + ".\n";
                 break;
-            case 12:
-                message += "La sentencia return no devuelve el tipo correspondiente en la línea " + linea + ".\n";
 
             default:
                 break;

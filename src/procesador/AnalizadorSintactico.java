@@ -263,11 +263,12 @@ public class AnalizadorSintactico {
             Tipo tipoR;
 
             tipoR = b();
-            p();
 
             if (tipoR != null) {
-                GE.selgErrorAnalizador("Sm-10", puntero, linea);
+                GE.selgErrorAnalizador("Sm-9", puntero, linea);
             }
+
+            p();
         }
 
         else if (isFirst.test('F')) {
@@ -386,7 +387,7 @@ public class AnalizadorSintactico {
             Tipo tipo1;
             Tipo tipo2;
 
-            equiparar(TokenType.opIgual, "=");
+            equiparar(TokenType.opIgual, "==");
             tipo1 = u();
             tipo2 = r1();
 
@@ -395,6 +396,7 @@ public class AnalizadorSintactico {
                     return tipo1;
 
                 } else {
+                    GE.selgErrorAnalizador("Sm-2", puntero, linea);
                     return tipoError;
                 }
 
@@ -633,7 +635,7 @@ public class AnalizadorSintactico {
 
                 } else {
                     GE.selgErrorAnalizador("Sm-4", puntero, linea);
-                    return new Tipo[] { tipoError, vacio };
+                    return new Tipo[] { tipoError, null };
                 }
             } else if (ts.buscarTipoTS(pos).equals(tipo)) {
                 return new Tipo[] { tipoOk, null };
@@ -913,12 +915,8 @@ public class AnalizadorSintactico {
             tipo3 = c();
 
             if (tipo3 != null && !tipo1.equals(tipo3)) {
-                if (tipo1.equals(vacio)) {
-                    GE.selgErrorAnalizador("Sm-8", puntero, linea);
-
-                } else {
-                    GE.selgErrorAnalizador("Sm-9", puntero, linea);
-                }
+                GE.selgErrorAnalizador("Sm-9", puntero, linea);
+                
             }
 
             equiparar(TokenType.llave, 2, "}");
@@ -1053,7 +1051,7 @@ public class AnalizadorSintactico {
                 return tipoB;
 
             } else {
-                GE.selgErrorAnalizador("Sm-12", puntero, linea);
+                GE.selgErrorAnalizador("Sm-8", puntero, linea);
                 return tipoError;
             }
 

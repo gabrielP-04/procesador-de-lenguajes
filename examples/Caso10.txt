@@ -3,20 +3,24 @@ function boolean verificarAcceso(int nivel) {
     var int clave;
     var boolean result;
 
-    mensaje = 5;         
-    clave = '1234';       
+    mensaje = 5;
+    clave = '1234';
 
-    if (nivel)             
+    if (nivel)
         output 'Acceso permitido';
+}
 
-    return result;     
-}    
+return;
 
 function void iniciarSistema(void) {
     var int nivel;
     nivel = 3;
 
-    verificarAcceso(nivel);    
+    while (nivel){
+        verificarAcceso(); 
+    }
+
+    return nivel; 
 }
 
 iniciarSistema();

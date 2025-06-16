@@ -33,10 +33,9 @@
 <PRoutput, >
 <cadena, 'Acceso permitido'>
 <puntoComa, >
-<PRreturn, >
-<id, 4>
-<puntoComa, >
 <llave, 2>
+<PRreturn, >
+<puntoComa, >
 <PRfun, >
 <PRvoid, >
 <id, 1>
@@ -52,10 +51,18 @@
 <opAsig, >
 <entero, 3>
 <puntoComa, >
-<id, 0>
+<PRwhile, >
 <paren, 1>
 <id, 2>
 <paren, 2>
+<llave, 1>
+<id, 0>
+<paren, 1>
+<paren, 2>
+<puntoComa, >
+<llave, 2>
+<PRreturn, >
+<id, 2>
 <puntoComa, >
 <llave, 2>
 <id, 1>
