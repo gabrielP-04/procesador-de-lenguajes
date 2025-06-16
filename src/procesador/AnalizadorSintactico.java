@@ -642,7 +642,9 @@ public class AnalizadorSintactico {
                 return new Tipo[] { tipoOk, null };
 
             } else {
-                GE.selgErrorAnalizador("Sm-11", puntero, linea);
+                if (!tipo.equals(tipoError))
+                    GE.selgErrorAnalizador("Sm-11", puntero, linea);
+                    
                 return new Tipo[] { tipoError, null };
             }
 
@@ -683,6 +685,11 @@ public class AnalizadorSintactico {
 
             equiparar(TokenType.opAsigDiv, "/=");
             tipo = e();
+
+            if (!tipo.equals(entero)) {
+                GE.selgErrorAnalizador("Sm-12", puntero, linea);
+                tipo = tipoError;
+            }
             equiparar(TokenType.puntoComa, ";");
 
             return tipo;

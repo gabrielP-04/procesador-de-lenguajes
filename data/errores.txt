@@ -1,1 +1,1 @@
-No se han econtrado errores en el análisis.
+ERROR SEMÁNTICO (12): La asignación con división solo es válida para enteros en la posición 46 de la línea 3.

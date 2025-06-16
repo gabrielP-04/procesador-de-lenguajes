@@ -196,6 +196,11 @@ public class GestorErrores {
                         + " de la línea " + linea + ".\n";
                 break;
 
+            case 12:
+                message += "La asignación con división solo es válida para enteros en la posición " + puntero
+                        + " de la línea " + linea + ".\n";
+                break;
+
             default:
                 break;
         }
