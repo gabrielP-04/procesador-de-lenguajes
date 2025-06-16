@@ -508,7 +508,7 @@ public class AnalizadorSintactico {
         } else if (sigToken.getType().equals(TokenType.cadena)) {
             parse += " 15";
 
-            equiparar(TokenType.cadena,"cadena");
+            equiparar(TokenType.cadena, "cadena");
 
             return cadena;
 
@@ -575,12 +575,12 @@ public class AnalizadorSintactico {
 
             if (ts.buscarTipoTS(pos).equals(entero) || ts.buscarTipoTS(pos).equals(cadena)) {
                 tipoS = tipoOk;
-                
+
             } else {
                 GE.selgErrorAnalizador("Sm-5", puntero, linea);
                 tipoS = tipoError;
             }
-            
+
             equiparar(TokenType.puntoComa, ";");
 
             return new Tipo[] { tipoS, null };
@@ -917,7 +917,7 @@ public class AnalizadorSintactico {
 
             if (tipo3 != null && !tipo1.equals(tipo3)) {
                 GE.selgErrorAnalizador("Sm-9", puntero, linea);
-                
+
             }
 
             equiparar(TokenType.llave, 2, "}");
@@ -1001,7 +1001,7 @@ public class AnalizadorSintactico {
 
             Tipo tipoT, tipoK;
 
-            equiparar(TokenType.coma,",");
+            equiparar(TokenType.coma, ",");
             tipoT = t();
 
             aLex.setZonaDeclarativa(false);
@@ -1090,7 +1090,7 @@ public class AnalizadorSintactico {
                 throw new RuntimeException("Error al leer token del fichero");
             }
         } else
-            GE.selgErrorAnalizador("Sx-" + esperado ,puntero, linea);
+            GE.selgErrorAnalizador("Sx-" + esperado, puntero, linea);
     }
 
 }

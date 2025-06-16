@@ -18,7 +18,7 @@ public class GestorErrores {
         bwErrores = writeFich("errores.txt");
     }
 
-    boolean getError () {
+    boolean getError() {
         return error;
     }
 
@@ -39,7 +39,8 @@ public class GestorErrores {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                throw new RuntimeException("\u001B[31mError léxico. \u001B[0mVerificar el fichero data/errores.txt para más detalles.");
+                throw new RuntimeException(
+                        "\u001B[31mError léxico. \u001B[0mVerificar el fichero data/errores.txt para más detalles.");
             case 2:
                 gErrorSin(partes[1]);
                 try {
@@ -47,7 +48,8 @@ public class GestorErrores {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                throw new RuntimeException("\u001B[31mError sinctáctico. \u001B[0mVerificar el fichero data/errores.txt para más detalles.");
+                throw new RuntimeException(
+                        "\u001B[31mError sinctáctico. \u001B[0mVerificar el fichero data/errores.txt para más detalles.");
             case 3:
                 gErrorASem(partes[1]);
                 break;
@@ -177,8 +179,8 @@ public class GestorErrores {
                         + " de la línea " + linea + ".\n";
                 break;
 
-             case 8:
-                message += "El tipo de las sentencia return no coinciden en la línea " + linea + ".\n";
+            case 8:
+                message += "Los tipos de las sentencias return de la función no coinciden en la línea " + linea + ".\n";
                 break;
 
             case 9:

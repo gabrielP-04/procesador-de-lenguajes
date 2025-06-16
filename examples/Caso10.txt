@@ -6,7 +6,7 @@ function boolean verificarAcceso(int nivel) {
     mensaje = 5;
     clave = '1234';
 
-    if (nivel)
+    if (nivel == 3)
         output 'Acceso permitido';
 }
 
@@ -18,6 +18,8 @@ function void iniciarSistema(void) {
 
     while (nivel){
         verificarAcceso(); 
+        nivel = nivel + 1;
+        return;
     }
 
     return nivel; 

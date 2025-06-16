@@ -2,6 +2,7 @@ function int procesarDatos(string mensaje, int cantidad) {
     var boolean resultado;
     var int total;
 
+    resultado = mensaje || total;
     resultado = mensaje == 'hola'; 
     total = resultado + cantidad; 
 
