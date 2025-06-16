@@ -331,6 +331,7 @@ public class AnalizadorSintactico {
                     return tipo1;
 
                 } else {
+                    GE.selgErrorAnalizador("Sm-1", puntero, linea);
                     return tipoError;
                 }
 

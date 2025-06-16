@@ -1,7 +1,1 @@
-ERROR SEMÁNTICO (11): La asignación no coincide con el tipo de la variable en la posición 17 de la línea 6.
-ERROR SEMÁNTICO (11): La asignación no coincide con el tipo de la variable en la posición 20 de la línea 7.
-ERROR SEMÁNTICO (6): Se esperaba un tipo boolean en la posición 14 de la línea 9.
-ERROR SEMÁNTICO (10): La sentencia return está mal ubicado en la posición 8 de la línea 13.
-ERROR SEMÁNTICO (7): La sentencia while debe tener una condicion de tipo lógico en la posición 17 de la línea 19.
-ERROR SEMÁNTICO (4): Los parámetros no coinciden con la llamada de la función en la posición 27 de la línea 20.
-ERROR SEMÁNTICO (9): El tipo que devuelve la función no es correcto en la posición 18 de la línea 23.
+ERROR LÉXICO (51): cadena demasiado larga en la posición 130 de la línea 3.
