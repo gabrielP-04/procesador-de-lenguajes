@@ -469,6 +469,9 @@ public class AnalizadorLexico {
                 if (c == '/') {
                     state = 0;
                     return 'A';
+                } else if (c == '*'){
+                    return 'A';
+                    
                 } else {
                     state = 7;
                     return 'A';

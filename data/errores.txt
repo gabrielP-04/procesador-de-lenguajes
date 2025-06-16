@@ -1,1 +1,1 @@
-ERROR LÉXICO (51): cadena demasiado larga en la posición 130 de la línea 3.
+No se han econtrado errores en el análisis.

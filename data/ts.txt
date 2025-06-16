@@ -1,0 +1,7 @@
+CONTENIDO DE LA TABLA #0 :
+
+ * LEXEMA: 'mensaje'
+   ATRIBUTOS :
+	+ tipo: 'cadena'
+	+ despl: 0
+---------   ---------

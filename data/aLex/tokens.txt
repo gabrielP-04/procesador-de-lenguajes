@@ -1,0 +1,9 @@
+<PRvar, >
+<PRstring, >
+<id, 0>
+<puntoComa, >
+<id, 0>
+<opAsigDiv, >
+<cadena, 'Este es un en este lenguaje JS--'>
+<puntoComa, >
+<finFich, >

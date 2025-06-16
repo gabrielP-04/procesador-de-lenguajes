@@ -265,7 +265,7 @@ public class AnalizadorSintactico {
             tipoR = b();
 
             if (tipoR != null) {
-                GE.selgErrorAnalizador("Sm-9", puntero, linea);
+                GE.selgErrorAnalizador("Sm-10", puntero, linea);
             }
 
             p();
@@ -521,7 +521,7 @@ public class AnalizadorSintactico {
             equiparar(TokenType.id, "identificador");
             tipo = v1();
 
-            if (tipo.equals(vacio)) {
+            if (tipo == null) {
                 return ts.buscarTipoTS(pos);
 
             } else if (ts.buscarTipoParamTS(pos).equals(tipo)) {
@@ -552,7 +552,7 @@ public class AnalizadorSintactico {
 
         } else if (isFollow.test('v')) {
             parse += " 18";
-            return vacio;
+            return null;
 
         } else {
             GE.selgErrorAnalizador("Sx-0", puntero, linea);
@@ -573,7 +573,7 @@ public class AnalizadorSintactico {
 
             equiparar(TokenType.id, "identificador");
 
-            if (ts.buscarTipoTS(pos).equals(entero) || ts.buscarTipoTS(pos).equals(entero)) {
+            if (ts.buscarTipoTS(pos).equals(entero) || ts.buscarTipoTS(pos).equals(cadena)) {
                 tipoS = tipoOk;
                 
             } else {

@@ -179,6 +179,7 @@ public class GestorErrores {
 
              case 8:
                 message += "El tipo de las sentencia return no coinciden en la línea " + linea + ".\n";
+                break;
 
             case 9:
                 message += "El tipo que devuelve la función no es correcto en la línea " + linea + ".\n";
