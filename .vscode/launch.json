@@ -11,7 +11,7 @@
             "mainClass": "procesador.Procesador",
             "projectName": "procesador-de-lenguajes_3d214a83",
             "args": [
-                "examples/Caso10.txt"
+                "examples\\Prueba.txt"
             ]
         },
         {
@@ -27,7 +27,7 @@
             "mainClass": "procesador.Procesador",
             "projectName": "Procesador_a49c18fe",
             "args": [
-                "examples/Caso10.txt"
+                "examples\\Prueba.txt"
             ]
         }
     ]

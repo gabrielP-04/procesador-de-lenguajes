@@ -1,0 +1,80 @@
+CONTENIDO DE LA TABLA #0 :
+
+ * LEXEMA: 's'
+   ATRIBUTOS :
+	+ tipo: 'cadena'
+	+ despl: 0
+---------   ---------
+ * LEXEMA: 'a'
+   ATRIBUTOS :
+	+ tipo: 'entero'
+	+ despl: 64
+---------   ---------
+ * LEXEMA: 'bb'
+   ATRIBUTOS :
+	+ tipo: 'boolean'
+	+ despl: 65
+---------   ---------
+ * LEXEMA: 'put'
+   ATRIBUTOS :
+	+ tipo: 'funcion'
+	+ numParam: 2
+		+ TipoParam1: 'cadena'
+		+ TipoParam2: 'entero'
+	+ TipoRetorno: 'vacio'
+	+ EtiqFuncion: 'Et1_put'
+---------   ---------
+ * LEXEMA: 'pp'
+   ATRIBUTOS :
+	+ tipo: 'entero'
+	+ despl: 66
+---------   ---------
+ * LEXEMA: 'kk'
+   ATRIBUTOS :
+	+ tipo: 'entero'
+	+ despl: 67
+---------   ---------
+ * LEXEMA: 'RR'
+   ATRIBUTOS :
+	+ tipo: 'funcion'
+	+ numParam: 2
+		+ TipoParam1: 'entero'
+		+ TipoParam2: 'boolean'
+	+ TipoRetorno: 'entero'
+	+ EtiqFuncion: 'Et1_RR'
+---------   ---------
+ * LEXEMA: 's_s'
+   ATRIBUTOS :
+	+ tipo: 'cadena'
+	+ despl: 68
+---------   ---------
+ * LEXEMA: 'cadena'
+   ATRIBUTOS :
+	+ tipo: 'funcion'
+	+ numParam: 0
+		+ TipoParam: vacío'
+	+ TipoRetorno: 'cadena'
+	+ EtiqFuncion: 'Et1_cadena'
+---------   ---------
+ * LEXEMA: 'kkk'
+   ATRIBUTOS :
+	+ tipo: 'boolean'
+	+ despl: 132
+---------   ---------
+ * LEXEMA: 'ppp'
+   ATRIBUTOS :
+	+ tipo: 'boolean'
+	+ despl: 133
+---------   ---------
+CONTENIDO DE LA TABLA #1 :
+
+ * LEXEMA: 'kk'
+   ATRIBUTOS :
+	+ tipo: 'cadena'
+	+ despl: 0
+---------   ---------
+ * LEXEMA: 'xx'
+   ATRIBUTOS :
+	+ tipo: 'cadena'
+	+ despl: 64
+---------   ---------
