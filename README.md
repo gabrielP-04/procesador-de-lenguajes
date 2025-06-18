@@ -1,6 +1,6 @@
 # Procesador de Lenguajes JS-- Grupo 80
 
-María Ruiz Castro (220269)
+María Ruiz Castro (220269),
 Gabriel Peña Sánchez (220267)
 
 ## Estructura del Proyecto
